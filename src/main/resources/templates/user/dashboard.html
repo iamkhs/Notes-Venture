@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Home Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <!-- Boxicons -->
+    <link href="https://cdn.jsdelivr.net/npm/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet">
+</head>
+<body>
+
+<!--navbar-->
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #202124;">
+    <div class="container-fluid">
+        <!-- Brand -->
+        <a class="navbar-brand" href="/user/0/u/dashboard">NotesVenture</a>
+
+<!--        Search Box-->
+        <form th:action="@{/user/search-notes}" th:method="GET" class="search-box d-flex align-items-center">
+            <input type="text" name="keyword" placeholder="Search Your Notes" class="search-input" />
+            <button type="submit" id="search"><i class='bx bx-search search-icon'></i></button>
+        </form>
+
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <!-- Nav Items -->
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0 text-uppercase">
+
+                <!--        home-->
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/">
+                        Home</a>
+                </li>
+
+                <!-- Username -->
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <span th:text="${user.name}"></span>
+                    </a>
+                </li>
+
+                <!-- Logout -->
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/logout}">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<!-- End Navbar -->
+
+
+<!--processing the notes-->
+<div class="container mt-10">
+    <div class="row mt-5">
+        <!-- Use th:if to check if noteList is empty -->
+        <div th:if="${noteList.isEmpty()}" class="col">
+            <div class="no-notes-message">
+                <h1>No Notes Found!</h1>
+            </div>
+        </div>
+
+        <div th:each="notes : ${noteList}" class="col">
+
+            <!-- Use onclick attribute to call the showPopup() function on click and pass the title, description, and note ID -->
+            <a href="#" class="card mt-5 note-link"
+               th:attr="data-noteid=${notes.getId()}, data-title=${notes.getTitle()}, data-description=${notes.getDescription()}"
+               onclick="showPopup(this)">
+                <!-- Replace "bx-icon" with the desired Boxicon name -->
+                <div class="card-icon">
+                    <i class='bx bx-icon'></i>
+                </div>
+                <div class="card-content">
+                    <span style="color: white" th:text="${notes.getTitle()}"></span>
+                    <br/>
+                    <span th:text="${notes.getDescription()}"></span>
+                </div>
+                <!-- Add a div for notes created date -->
+                <div class="card-footer" style="color: #888; font-size: 14px;">
+                    <span th:if="${notes.getNotesUpdatedDate() == null}"
+                          th:text="${notes.getNotesCreatedDate()}"></span>
+                    <span th:if="${notes.getNotesUpdatedDate() != null}"
+                          th:text="${notes.getNotesUpdatedDate()}"></span>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+
+
+<!-- Floating Button -->
+<div class="floating-button">
+    <a href="#" id="create-note">
+        <i class='bx bx-plus floating-button-icon'></i>
+    </a>
+</div>
+
+<!-- Include the create new notes popup -->
+<div class="popup-container" id="create-note-popup">
+    <div class="popup-card">
+        <div class="popup-header">Create a new Note</div>
+        <div class="popup-content">
+
+
+            <!-- Form to create new note -->
+            <form th:method="post" th:action="@{/user/creating-notes}" class="needs-validation">
+                <!-- Title field -->
+                <div class="mb-3">
+                    <label for="title" class="form-label">Note Title</label>
+                    <input name="title" type="text" class="form-control" id="title" required>
+                    <div class="invalid-feedback">
+                        Please enter a title.
+                    </div>
+                </div>
+
+                <!-- Description field -->
+                <div class="mb-3">
+                    <label for="description" class="form-label">Note Description</label>
+                    <textarea rows="10" name="description" class="form-control" id="description" required></textarea>
+                    <div class="invalid-feedback">
+                        Please enter a description.
+                    </div>
+                </div>
+
+                <!-- Submit button -->
+                <div class="popup-submit">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+
+        </div>
+        <div class="popup-close" onclick="hidePopup()">&times;</div>
+    </div>
+</div>
+
+
+<!--THIS IS FOR UPDATE NOTE-->
+<div class="popup-container" id="update-note-popup">
+    <div class="popup-card">
+        <div class="popup-header">Update Note</div>
+        <div class="popup-content">
+
+            <!-- Form to update an existing note -->
+            <form th:method="post" th:action="@{/user/update-notes}" class="needs-validation">
+                <!-- Hidden input field to store the note ID -->
+                <input type="hidden" id="note-id" name="noteId">
+                <!-- Title field -->
+                <div class="mb-3">
+                    <label for="update-title" class="form-label">Note Title</label>
+                    <input name="title" type="text" class="form-control" id="update-title" required>
+                    <div class="invalid-feedback">
+                        Please enter a title.
+                    </div>
+                </div>
+
+                <!-- Description field -->
+                <div class="mb-3">
+                    <label for="update-description" class="form-label">Note Description</label>
+                    <textarea rows="10" name="description" class="form-control" id="update-description"
+                              required></textarea>
+                    <div class="invalid-feedback">
+                        Please enter a description.
+                    </div>
+                </div>
+
+                <!-- Submit button -->
+                <div class="popup-submit">
+                    <button type="submit" class="btn btn-primary" name="action" value="update">Update</button>
+                </div>
+
+                <!-- Custom delete button -->
+                <div class="popup-submit">
+                    <button type="submit" class="btn btn-danger" name="action" value="delete">Delete</button>
+                </div>
+
+            </form>
+        </div>
+        <div class="popup-close" onclick="hideUpdatePopup()">&times;</div>
+    </div>
+</div>
+
+<!-- Include the necessary scripts -->
+<script src="/js/script.js"></script>
+
+</body>
+</html>

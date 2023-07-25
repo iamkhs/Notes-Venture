@@ -1,0 +1,408 @@
+/* Apply a reset to remove default margin and padding */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #202124;
+    color: rgba(255, 255, 255, 0.9);
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.background-image {
+    /* Use a linear gradient to create a semi-transparent overlay */
+    width: 100%;
+    height: 100%;
+    color: white;
+    background: linear-gradient(rgba(0,0,0,.8), rgba(0,0,0,.8)), url("/img/home-screen.jpeg");
+    background-size: cover;
+    font-size: 24px;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Center vertically */
+    align-items: center; /* Center horizontally */
+    text-align: center;
+}
+
+.mt {
+    margin-top: 300px;
+}
+
+/* Adjust the position of the navbar */
+nav.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 9999; /* Ensure the navbar is on top of other elements */
+    background-color: #202124; /* Set the dark background color for the navbar */
+    border-bottom: 1px solid #444; /* Add a border at the bottom for a nice look */
+    display: flex;
+    justify-content: center; /* Center the items horizontally */
+    align-items: center; /* Center the items vertically */
+    padding: 10px 0; /* Add some padding to the navbar */
+}
+
+.navbar-brand {
+    color: rgba(255, 255, 255, 0.9); /* Set the color of the navbar brand text */
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.nav-link {
+    color: rgba(255, 255, 255, 0.9); /* Set the color of the navbar links */
+    text-decoration: none;
+    margin-left: 20px; /* Add some space between the links */
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.nav-link:hover {
+    color: rgba(255, 255, 255, 1); /* Set the color of the navbar links on hover */
+}
+
+/* Dark mode for cards */
+.card {
+    height: 240px;
+    width: 210px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 15px;
+    margin-bottom: 20px;
+    background-color: #333;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+/* Hover effect for cards */
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Styles for card content */
+.card-content {
+    color: #e8eaed;
+    text-align: center;
+    position: relative;
+}
+
+/* Limit the number of lines displayed */
+.card-content span {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 5;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Icon styles */
+.card-icon {
+    font-size: 40px;
+    color: #fff;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #555;
+    opacity: 0;
+    transform: scale(0);
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.card:hover .card-icon {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Search box styles */
+.search-box-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.search-box {
+    width: 300px;
+    max-width: 600px;
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    border: 1px solid #444;
+    border-radius: 13px;
+    background-color: #333;
+    color: #888;
+    font-size: 16px;
+    outline: none;
+
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.search-box input {
+    flex: 1;
+    border: none;
+    background-color: transparent;
+    color: #fff;
+    font-size: 18px;
+    margin-left: 10px;
+    padding: 4px 8px;
+}
+
+.search-icon {
+    font-size: 20px;
+    color: #888;
+}
+
+
+/* Style the button container */
+.search-box button {
+    background-color: #333;
+    border: none; /* Remove the button border */
+    cursor: pointer; /* Add cursor pointer on hover */
+    outline: none; /* Remove the default outline on focus */
+    padding: 5px; /* Add padding to the button */
+}
+
+/* Style the search icon inside the button */
+.search-box button i {
+    color: rgba(255, 255, 255, 0.9); /* Set the color for the search icon */
+    font-size: 24px; /* Adjust the font size of the search icon */
+}
+
+/* Change the color of the search icon on hover */
+.search-box button:hover i {
+    color: #fff; /* Set the color for the search icon on hover */
+}
+
+
+/* Floating button styles */
+.floating-button {
+    position: fixed;
+    width: 60px;
+    height: 60px;
+    background-color: #555;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out;
+    bottom: 30px;
+    right: 30px;
+    z-index: 2;
+}
+
+.floating-button-icon {
+    font-size: 30px;
+    color: #fff;
+}
+
+/* Animation on hover */
+.floating-button:hover {
+    transform: scale(1.1);
+}
+
+/* Center the search box horizontally and align with the top */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 100vh;
+    padding-top: 20px;
+}
+
+
+
+
+/* CSS for the Create New Note Popup */
+
+.popup-container {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7); /* Darken the background */
+    z-index: 999; /* Ensure it appears above other elements */
+}
+
+.popup-card {
+    background-color: #202124;
+    color: rgba(255, 255, 255, 0.9);
+    max-width: 700px;
+    width: 600px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: relative; /* To allow absolute positioning of close button */
+}
+
+.popup-header {
+    padding: 20px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    border-bottom: 1px solid #ccc;
+}
+
+.popup-content {
+    padding: 20px;
+}
+
+.popup-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.popup-submit {
+    text-align: center;
+    padding: 10px;
+}
+
+/* CSS for removing underline from note links */
+.note-link {
+    text-decoration: none; /* Remove underline */
+    color: inherit; /* Use the default text color of the parent element (the card) */
+}
+
+/* CSS for dark form fields */
+.popup-card input.form-control,
+.popup-card textarea.form-control {
+    background-color: #333; /* Set the dark background color for input and textarea fields */
+    color: rgba(255, 255, 255, 0.9); /* Set the text color for input and textarea fields */
+    border: 1px solid rgba(255, 255, 255, 0.1); /* Set the border color for input and textarea fields */
+}
+
+/* CSS for dark form labels */
+.popup-card .form-label {
+    color: rgba(255, 255, 255, 0.9); /* Set the text color for form labels */
+}
+
+/* CSS for dark form invalid feedback */
+.popup-card .invalid-feedback {
+    color: #f44336; /* Set the text color for invalid feedback */
+}
+
+
+/* ... (your existing CSS code) ... */
+
+/* Add responsive styles for mobile view */
+@media only screen and (max-width: 600px) {
+    /* Adjust the position of the navbar for mobile */
+    nav.navbar {
+        justify-content: space-between; /* Space out the brand and other elements */
+        padding: 10px; /* Reduce padding for mobile view */
+    }
+
+    .navbar-brand {
+        font-size: 20px; /* Reduce font size for mobile view */
+    }
+
+    .search-box-container {
+        margin-top: 60px; /* Increase top margin for mobile view */
+    }
+
+    .search-box {
+        width: 30%; /* Make the search box full width for mobile view */
+        max-width: none; /* Remove the max-width constraint */
+        left: 160px; /* Align the search box to the left for mobile view */
+        transform: none; /* Reset the translation */
+    }
+
+    .search-box input {
+        flex: 1;
+        border: none;
+        background-color: transparent;
+        color: #fff;
+        width: 30px;
+        font-size: 10px;
+        margin-left: 10px;
+        padding: 4px 8px;
+    }
+    /* Styles for card content in mobile view */
+    .card-content {
+        font-size: 14px; /* Reduce font size for card content in mobile view */
+    }
+
+    /* Floating button styles for mobile view */
+    .floating-button {
+        bottom: 20px; /* Adjust position for mobile view */
+        right: 20px; /* Adjust position for mobile view */
+        width: 50px; /* Reduce button size for mobile view */
+        height: 50px; /* Reduce button size for mobile view */
+    }
+
+    .floating-button-icon {
+        font-size: 24px; /* Reduce icon size for mobile view */
+    }
+
+    /* Center the search box horizontally and align with the top */
+    .container {
+        padding-top: 80px; /* Increase top padding for mobile view */
+    }
+
+    /* CSS for the Create New Note Popup in mobile view */
+    .popup-card {
+        max-width: 100%; /* Make the popup card full width for mobile view */
+    }
+
+    .popup-content {
+        padding: 10px; /* Reduce padding for mobile view */
+    }
+
+    .popup-submit {
+        padding: 5px; /* Reduce padding for mobile view */
+    }
+
+    .popup-close {
+        top: 5px; /* Adjust close button position for mobile view */
+        right: 5px; /* Adjust close button position for mobile view */
+        font-size: 18px; /* Reduce close button size for mobile view */
+    }
+}
+
+.no-notes-message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1; /* Reduce the z-index to allow interaction with other elements */
+    width: 100%;
+    height: 100%;
+}
+
+
+/* Style the message text */
+.no-notes-message h1 {
+    color: #fff;
+    font-weight: bold;
+}
