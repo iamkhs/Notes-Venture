@@ -3,4 +3,4 @@
 
 this project was built using Spring Boot, MySQL database, Spring Data JPA, and Thymeleaf for the front end.
 
-With NotesVenture, you can stay organized and keep track of your ideas, to-do lists, and important reminders. The app ensures the security of your notes through Spring Security, providing robust authentication and authorization features.
+With NotesVenture, you can stay organized and keep track of your ideas. The app ensures the security of your notes through Spring Security, providing robust authentication and authorization features.
