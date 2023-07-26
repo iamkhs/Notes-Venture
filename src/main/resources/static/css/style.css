@@ -139,8 +139,9 @@ nav.navbar {
 }
 
 .search-box {
+    height: 44px;
     width: 300px;
-    max-width: 600px;
+    max-width: 400px;
     display: flex;
     align-items: center;
     padding: 8px;
@@ -164,6 +165,7 @@ nav.navbar {
     font-size: 18px;
     margin-left: 10px;
     padding: 4px 8px;
+    height: 32px;
 }
 
 .search-icon {
@@ -254,8 +256,9 @@ nav.navbar {
     background-color: #202124;
     color: rgba(255, 255, 255, 0.9);
     max-width: 700px;
-    width: 600px;
+    width: 700px;
     border-radius: 10px;
+    max-height: 700px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     position: relative; /* To allow absolute positioning of close button */
 }
