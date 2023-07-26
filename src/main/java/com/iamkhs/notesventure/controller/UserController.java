@@ -104,10 +104,17 @@ public class UserController {
 
     // Notes creating process
     @PostMapping("/user/creating-notes")
-    public String creatingNotes(@ModelAttribute Notes notes, Principal principal){
+    public String creatingNotes(@ModelAttribute Notes notes, Principal principal, HttpSession session){
         String email = principal.getName();
 
         User user = this.userService.getUser(email);
+
+        // if user filled the title and description empty!
+        if (notes.getTitle().trim().isEmpty() && notes.getDescription().trim().isEmpty()){
+            session.setAttribute("message", new Messages("Something went wrong!", "danger"));
+            return "redirect:/user/0/u/dashboard";
+        }
+
         notes.setUser(user);
         notes.setNotesCreatedDate(LocalDateTime.now());
 
@@ -119,9 +126,11 @@ public class UserController {
     // Updating Notes
     @PostMapping("/user/update-notes")
     public String updateNotes(@RequestParam Long noteId, String action, @ModelAttribute Notes notes){
-        if (action.equals("delete")){
+        // Deleting Note Process
+        if (action != null && action.equals("delete") || notes.getTitle().trim().isEmpty() && notes.getDescription().trim().isEmpty()){
             this.notesService.deleteNote(noteId);
-        }else if (action.equals("update")){
+        }else{
+            // Updating Note Process
             Notes preNotes = this.notesService.getNotes(noteId);
             preNotes.setTitle(notes.getTitle());
             preNotes.setDescription(notes.getDescription());
