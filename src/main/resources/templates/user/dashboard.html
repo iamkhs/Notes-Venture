@@ -9,6 +9,14 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <!-- Boxicons -->
     <link href="https://cdn.jsdelivr.net/npm/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet">
+
+    <!-- Include TinyMCE -->
+    <script src="https://cdn.tiny.cloud/1/ly2ttayt6bwot1bffllzhjt1utzx8jwqjrf6npnmy8lcm8ob/tinymce/6/tinymce.min.js"
+            referrerpolicy="origin"></script>
+    <!-- Include the dark theme CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tinymce@5.10.2/themes/oxide-dark/skins/ui/oxide-dark/content.css"
+          rel="stylesheet">
+
 </head>
 <body>
 
@@ -18,9 +26,9 @@
         <!-- Brand -->
         <a class="navbar-brand" href="/user/0/u/dashboard">NotesVenture</a>
 
-<!--        Search Box-->
+        <!--        Search Box-->
         <form th:action="@{/user/search-notes}" th:method="GET" class="search-box d-flex align-items-center">
-            <input type="text" name="keyword" placeholder="Search Your Notes" class="search-input" />
+            <input type="text" name="keyword" placeholder="Search Your Notes" class="search-input"/>
             <button type="submit" id="search"><i class='bx bx-search search-icon'></i></button>
         </form>
 
@@ -58,7 +66,18 @@
 
 
 <!--processing the notes-->
-<div class="container mt-10">
+<div class="container">
+
+    <!-- Error message box -->
+    <div th:if="${session.message}" style="margin-top: 50px">
+        <div th:classappend="${'alert-'+ session.message.type}" class="alert text-center" role="alert">
+            <span th:text="${session.message.content}"></span>
+        </div>
+
+        <!--        removing the session-->
+        <th:block th:text="${@sessionHelper.removeSession()}"></th:block>
+    </div>
+
     <div class="row mt-5">
         <!-- Use th:if to check if noteList is empty -->
         <div th:if="${noteList.isEmpty()}" class="col">
@@ -80,7 +99,7 @@
                 <div class="card-content">
                     <span style="color: white" th:text="${notes.getTitle()}"></span>
                     <br/>
-                    <span th:text="${notes.getDescription()}"></span>
+                    <span th:utext="${notes.getDescription()}"></span>
                 </div>
                 <!-- Add a div for notes created date -->
                 <div class="card-footer" style="color: #888; font-size: 14px;">
@@ -102,7 +121,7 @@
     </a>
 </div>
 
-<!-- Include the create new notes popup -->
+<!-- Creating new notes -->
 <div class="popup-container" id="create-note-popup">
     <div class="popup-card">
         <div class="popup-header">Create a new Note</div>
@@ -114,7 +133,7 @@
                 <!-- Title field -->
                 <div class="mb-3">
                     <label for="title" class="form-label">Note Title</label>
-                    <input name="title" type="text" class="form-control" id="title" required>
+                    <input name="title" type="text" class="form-control" id="title">
                     <div class="invalid-feedback">
                         Please enter a title.
                     </div>
@@ -123,7 +142,7 @@
                 <!-- Description field -->
                 <div class="mb-3">
                     <label for="description" class="form-label">Note Description</label>
-                    <textarea rows="10" name="description" class="form-control" id="description" required></textarea>
+                    <textarea rows="14" name="description" class="form-control" id="description"></textarea>
                     <div class="invalid-feedback">
                         Please enter a description.
                     </div>
@@ -131,7 +150,7 @@
 
                 <!-- Submit button -->
                 <div class="popup-submit">
-                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="submit" class="btn btn-outline-primary">Save</button>
                 </div>
             </form>
 
@@ -148,36 +167,40 @@
         <div class="popup-content">
 
             <!-- Form to update an existing note -->
-            <form th:method="post" th:action="@{/user/update-notes}" class="needs-validation">
+            <form id="update-form" th:method="post" th:action="@{/user/update-notes}">
                 <!-- Hidden input field to store the note ID -->
                 <input type="hidden" id="note-id" name="noteId">
+
                 <!-- Title field -->
                 <div class="mb-3">
                     <label for="update-title" class="form-label">Note Title</label>
-                    <input name="title" type="text" class="form-control" id="update-title" required>
+                    <input name="title" type="text" class="form-control" id="update-title">
                     <div class="invalid-feedback">
                         Please enter a title.
                     </div>
                 </div>
 
-                <!-- Description field -->
+                <!-- Description field using TinyMCE editor -->
                 <div class="mb-3">
                     <label for="update-description" class="form-label">Note Description</label>
-                    <textarea rows="10" name="description" class="form-control" id="update-description"
-                              required></textarea>
+                    <div id="update-description"></div>
+                    <textarea name="description" id="update-description-hidden" style="display: none;"></textarea>
                     <div class="invalid-feedback">
                         Please enter a description.
                     </div>
                 </div>
 
-                <!-- Submit button -->
                 <div class="popup-submit">
-                    <button type="submit" class="btn btn-primary" name="action" value="update">Update</button>
-                </div>
+                    <!-- Submit button -->
+                    <div style="display: inline-block; margin-right: 10px;">
+                        <button type="button" class="btn btn-outline-primary" onclick="submitForm()">Update</button>
+                    </div>
 
-                <!-- Custom delete button -->
-                <div class="popup-submit">
-                    <button type="submit" class="btn btn-danger" name="action" value="delete">Delete</button>
+                    <!-- Custom delete button -->
+                    <div style="display: inline-block;">
+                        <button type="submit" class="btn btn-outline-danger" name="action" value="delete">Delete
+                        </button>
+                    </div>
                 </div>
 
             </form>
@@ -189,5 +212,17 @@
 <!-- Include the necessary scripts -->
 <script src="/js/script.js"></script>
 
+
+<script>
+    tinymce.init({
+        selector: '#description',
+        // Specify the dark theme
+        skin: "oxide-dark",
+        content_css: "dark",
+        plugins: 'lists',
+        toolbar: 'numlist bullist',
+        lists_indent_on_tab: false
+    });
+</script>
 </body>
 </html>
