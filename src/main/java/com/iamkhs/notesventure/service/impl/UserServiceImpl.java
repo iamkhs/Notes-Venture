@@ -5,6 +5,8 @@ import com.iamkhs.notesventure.repository.UserRepository;
 import com.iamkhs.notesventure.service.UserService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -24,5 +26,8 @@ public class UserServiceImpl implements UserService {
         return userRepository.findUserByEmail(email);
     }
 
-
+    @Override
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
 }
