@@ -8,17 +8,61 @@ function showPopup() {
     activePopup = "create-note-popup";
 }
 
-// Function to show the update note popup
 function showUpdatePopup(noteLink) {
     const noteId = noteLink.getAttribute("data-noteid");
     const title = noteLink.getAttribute("data-title");
     const description = noteLink.getAttribute("data-description");
     document.querySelector("#note-id").value = noteId;
     document.querySelector("#update-title").value = title;
-    document.querySelector("#update-description").value = description;
+
+    const updateDescriptionElement = document.querySelector("#update-description");
+    updateDescriptionElement.innerHTML = description;
+
+    // Check if the TinyMCE editor is already initialized
+    const updateDescriptionEditor = tinymce.get('update-description');
+
+    if (!updateDescriptionEditor) {
+        // If the editor is not initialized, initialize it
+        tinymce.init({
+            selector: '#update-description',
+            skin: "oxide-dark",
+            content_css: "dark",
+
+            height: 400, // Change this height as per your requirement
+            // autoresize_bottom_margin: 20,
+        });
+    } else {
+        // If the editor is already initialized, set its content
+        updateDescriptionEditor.setContent(description);
+    }
+
+    // Set the updated description to the hidden textarea
+    document.querySelector("#update-description-hidden").value = description;
+
     document.querySelector("#update-note-popup").style.display = "flex";
     activePopup = "update-note-popup";
 }
+
+
+// Function to update the hidden textarea with the updated description from TinyMCE editor
+function updateHiddenDescription() {
+    // Trigger the save operation on the TinyMCE editor to update its content
+    tinymce.triggerSave();
+
+    // Get the updated description from the TinyMCE editor
+    const updateDescriptionEditor = tinymce.get('update-description');
+    const updatedDescription = updateDescriptionEditor.getContent();
+
+    // Set the updated description to the hidden textarea
+    document.querySelector("#update-description-hidden").value = updatedDescription;
+}
+
+// Function to submit the form after updating the hidden description field
+function submitForm() {
+    updateHiddenDescription(); // Update the hidden description field with the latest content from TinyMCE
+    document.querySelector("#update-form").submit();
+}
+
 
 // Function to hide the create note popup
 function hidePopup() {
