@@ -75,10 +75,12 @@ public class UserController {
         // process the user saving to database.....
         try{
             if (bindingResult.hasErrors()){
-                throw new Exception("Something went Wrong, Try again!");
+                model.addAttribute("user", user);
+                return "signup";
             }
 
             if (!user.getPassword().equals(user.getConfirmPassword())){
+                bindingResult.rejectValue("confirmPassword", "error.confirmPassword", "Password and confirm password do not match!");
                 throw new Exception("Password not match!");
             }
 
@@ -88,13 +90,20 @@ public class UserController {
             // PASSWORD ENCODING
             user.setPassword(passwordEncoder.encode(user.getPassword()));
 
+            // Checking if the email already exists in the database
+            User existingUser = userService.getUser(user.getEmail());
+            if (existingUser != null){
+                bindingResult.rejectValue("email", "error.email", "This email is already registered!");
+                throw new Exception("This email is already Registered!");
+            }
+
             User savedUser = userService.saveUser(user);
             model.addAttribute("user", savedUser);
             session.setAttribute("message", new Messages("Successfully Registered", "alert-success"));
 
         }catch (Exception e){
-            model.addAttribute("message", "error");
-            session.setAttribute("message", new Messages("Something went wrong!!"+ e.getMessage(), "alert-danger"));
+            model.addAttribute("user", user);
+            session.setAttribute("message", new Messages("Something went wrong!! "+ e.getMessage(), "alert-danger"));
             return "signup";
         }
 
