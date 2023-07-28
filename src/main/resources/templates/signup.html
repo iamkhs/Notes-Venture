@@ -2,81 +2,88 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
 
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+          integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
 
-  <link rel="stylesheet" th:href="@{/css/login-style.css}">
+    <link rel="stylesheet" th:href="@{/css/login-style.css}">
 
-  <meta charset="UTF-8">
+    <meta charset="UTF-8">
     <title>Signup</title>
 </head>
 <body>
 
 <div class="container">
-  <div class="row mt-5">
-    <div class="col-md-5 offset-md-4">
+    <div class="row mt-5">
+        <div class="col-md-5 offset-md-4">
 
-      <div class="my-card">
-        <div th:if="${session.message}" th:classappend="${session.message.type}" class="alert text-center">
-          <span th:text="${session.message.content}"></span>
+            <div class="my-card">
+                <div th:if="${session.message}" th:classappend="${session.message.type}" class="alert text-center">
+                    <span th:text="${session.message.content}"></span>
 
-          <!--          removing the session-->
-          <th:block th:text="${@sessionHelper.removeSession()}"></th:block>
+                    <!--          removing the session-->
+                    <th:block th:text="${@sessionHelper.removeSession()}"></th:block>
+                </div>
+
+                <h1 class="text-center">Signup Here</h1>
+
+                <form th:method="post" th:action="@{form-process}" th:object="${user}">
+
+
+                    <!--          name field-->
+                    <div class="mb-3">
+                        <label for="nameField" class="form-label">Name</label>
+                        <input name="name" type="text" class="form-control" id="nameField" required>
+                    </div>
+
+
+                    <!--          email field-->
+                    <div class="mb-3">
+                        <label for="emailField" class="form-label">Email address</label>
+                        <input name="email" type="email" class="form-control"
+                               th:classappend="${#fields.hasErrors('email') ? 'is-invalid':''}"
+                               id="emailField" required>
+                        <div class="invalid-feedback" th:each="e : ${#fields.errors('email')}" th:text="${e}"></div>
+                        <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+                    </div>
+
+                    <!--          password field-->
+                    <div class="mb-3">
+                        <label for="passwordField" class="form-label">Password</label>
+                        <input name="password" type="password" class="form-control"
+                               th:classappend="${#fields.hasErrors('password') ? 'is-invalid':''}"
+                               id="passwordField" required>
+                        <div class="invalid-feedback" th:each="e : ${#fields.errors('password')}" th:text="${e}"></div>
+                    </div>
+
+                    <!--          confirm password field-->
+                    <div class="mb-3">
+                        <label for="confirmPasswordField" class="form-label">Confirm Password</label>
+                        <input name="confirmPassword" type="password" class="form-control"
+                               th:classappend="${#fields.hasErrors('confirmPassword') ? 'is-invalid':''}"
+                               id="confirmPasswordField"
+                               required>
+                        <div class="invalid-feedback" th:each="e : ${#fields.errors('confirmPassword')}"
+                             th:text="${e}"></div>
+
+                    </div>
+
+
+                    <!--            submit button-->
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+
+
+                </form>
+
+            </div>
+
         </div>
 
-        <h1 class="text-center">Signup Here</h1>
-
-        <form th:method="post" th:action="@{form-process}" th:object="${user}">
-
-
-          <!--          name field-->
-          <div class="mb-3">
-            <label for="nameField" class="form-label">Name</label>
-            <input name="name" type="text" class="form-control" id="nameField" required>
-          </div>
-
-
-          <!--          email field-->
-          <div class="mb-3">
-            <label for="emailField" class="form-label">Email address</label>
-            <input name="email" type="email" class="form-control" id="emailField" required>
-            <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
-          </div>
-
-          <!--          password field-->
-          <div class="mb-3">
-            <label for="passwordField" class="form-label">Password</label>
-            <input name="password" type="password" class="form-control"
-                   th:classappend="${#fields.hasErrors('password') ? 'is-invalid':''}"
-                   id="passwordField" required>
-            <div class="invalid-feedback" th:each="e : ${#fields.errors('password')}" th:text="${e}"></div>
-          </div>
-
-          <!--          confirm password field-->
-          <div class="mb-3">
-            <label for="confirmPasswordField" class="form-label">Confirm Password</label>
-            <input name="confirmPassword" type="password" class="form-control"
-                   th:classappend="${#fields.hasErrors('confirmPassword') ? 'is-invalid':''}"
-                   id="confirmPasswordField"
-                   required>
-            <div class="invalid-feedback" th:each="e : ${#fields.errors('confirmPassword')}" th:text="${e}"></div>
-
-          </div>
-
-
-          <!--            submit button-->
-          <div class="text-center">
-            <button type="submit" class="btn btn-primary">Submit</button>
-          </div>
-
-
-        </form>
-
-      </div>
-
     </div>
-
-  </div>
 
 </div>
 </body>
