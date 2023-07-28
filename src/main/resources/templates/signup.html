@@ -14,17 +14,19 @@
 
 <div class="container">
   <div class="row mt-5">
-    <div class="col-md-4 offset-md-4">
+    <div class="col-md-5 offset-md-4">
 
       <div class="my-card">
         <div th:if="${session.message}" th:classappend="${session.message.type}" class="alert text-center">
-          <p th:text="${session.message.content}"></p>
+          <span th:text="${session.message.content}"></span>
 
+          <!--          removing the session-->
+          <th:block th:text="${@sessionHelper.removeSession()}"></th:block>
         </div>
 
         <h1 class="text-center">Signup Here</h1>
 
-        <form th:method="post" th:action="@{form-process}">
+        <form th:method="post" th:action="@{form-process}" th:object="${user}">
 
 
           <!--          name field-->
@@ -45,16 +47,20 @@
           <div class="mb-3">
             <label for="passwordField" class="form-label">Password</label>
             <input name="password" type="password" class="form-control"
+                   th:classappend="${#fields.hasErrors('password') ? 'is-invalid':''}"
                    id="passwordField" required>
-            <div class="form-text">minimum character is 5</div>
+            <div class="invalid-feedback" th:each="e : ${#fields.errors('password')}" th:text="${e}"></div>
           </div>
 
           <!--          confirm password field-->
           <div class="mb-3">
             <label for="confirmPasswordField" class="form-label">Confirm Password</label>
             <input name="confirmPassword" type="password" class="form-control"
+                   th:classappend="${#fields.hasErrors('confirmPassword') ? 'is-invalid':''}"
                    id="confirmPasswordField"
                    required>
+            <div class="invalid-feedback" th:each="e : ${#fields.errors('confirmPassword')}" th:text="${e}"></div>
+
           </div>
 
 
