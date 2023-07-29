@@ -49,6 +49,10 @@ public class SecurityConfig {
                                 .requestMatchers("/admin/**").hasRole("ADMIN")
                                 .requestMatchers("/**").permitAll())
 
+                .rememberMe(remember->
+                        remember.tokenValiditySeconds(604800) // for 7 days
+                .userDetailsService(userDetailsService()))
+
                 .formLogin(form-> form.loginPage("/login")
                         .loginProcessingUrl("/do-login")
                         .successHandler(authenticationSuccessHandler()))
