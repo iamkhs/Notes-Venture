@@ -8,8 +8,8 @@ import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
-@Entity
-public class Notes {
+@Entity(name = "notes")
+public class Note {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

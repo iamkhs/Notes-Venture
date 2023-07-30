@@ -1,9 +1,9 @@
 package com.iamkhs.notesventure.controller;
 
-import com.iamkhs.notesventure.entities.Notes;
+import com.iamkhs.notesventure.entities.Note;
 import com.iamkhs.notesventure.entities.User;
 import com.iamkhs.notesventure.helper.Messages;
-import com.iamkhs.notesventure.service.NotesService;
+import com.iamkhs.notesventure.service.NoteService;
 import com.iamkhs.notesventure.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -27,12 +27,12 @@ public class UserController {
 
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
-    private final NotesService notesService;
+    private final NoteService noteService;
 
-    public UserController(UserService userService, PasswordEncoder passwordEncoder, NotesService notesService) {
+    public UserController(UserService userService, PasswordEncoder passwordEncoder, NoteService noteService) {
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
-        this.notesService = notesService;
+        this.noteService = noteService;
     }
 
     @GetMapping("user/0/u/dashboard")
@@ -42,23 +42,23 @@ public class UserController {
 
         String keyword = (String) model.asMap().get("keyword");
 
-        List<Notes> notesList;
+        List<Note> notesList;
 
         if (keyword != null  && !keyword.trim().isEmpty()) {
-            notesList = this.notesService.searchNotes(user.getId(), keyword);
+            notesList = this.noteService.searchNotes(user.getId(), keyword);
         }
         else {
             notesList = user.getNotesList();
-            for (Notes notes : notesList) {
-                LocalDateTime notesCreatedDate = notes.getNotesCreatedDate();
-                LocalDateTime notesUpdateDate = notes.getNotesUpdatedDate();
+            for (Note note : notesList) {
+                LocalDateTime notesCreatedDate = note.getNotesCreatedDate();
+                LocalDateTime notesUpdateDate = note.getNotesUpdatedDate();
 
                 LocalDate createdDate = notesCreatedDate.toLocalDate();
-                notes.setNotesCreatedDate(createdDate.atStartOfDay());
+                note.setNotesCreatedDate(createdDate.atStartOfDay());
 
                 if (notesUpdateDate != null) {
                     LocalDate updateDate = notesUpdateDate.toLocalDate();
-                    notes.setNotesUpdatedDate(updateDate.atStartOfDay());
+                    note.setNotesUpdatedDate(updateDate.atStartOfDay());
                 }
             }
         }
@@ -113,38 +113,38 @@ public class UserController {
 
     // Notes creating process
     @PostMapping("/user/creating-notes")
-    public String creatingNotes(@ModelAttribute Notes notes, Principal principal, HttpSession session){
+    public String creatingNotes(@ModelAttribute Note note, Principal principal, HttpSession session){
         String email = principal.getName();
 
         User user = this.userService.getUser(email);
 
         // if user filled the title and description empty!
-        if (notes.getTitle().trim().isEmpty() && notes.getDescription().trim().isEmpty()){
+        if (note.getTitle().trim().isEmpty() && note.getDescription().trim().isEmpty()){
             session.setAttribute("message", new Messages("Something went wrong!", "danger"));
             return "redirect:/user/0/u/dashboard";
         }
 
-        notes.setUser(user);
-        notes.setNotesCreatedDate(LocalDateTime.now());
+        note.setUser(user);
+        note.setNotesCreatedDate(LocalDateTime.now());
 
-        this.notesService.saveNotes(notes);
+        this.noteService.saveNotes(note);
 
         return "redirect:/user/0/u/dashboard";
     }
 
     // Updating Notes
     @PostMapping("/user/update-notes")
-    public String updateNotes(@RequestParam Long noteId, String action, @ModelAttribute Notes notes){
+    public String updateNotes(@RequestParam Long noteId, String action, @ModelAttribute Note note){
         // Deleting Note Process
-        if (action != null && action.equals("delete") || notes.getTitle().trim().isEmpty() && notes.getDescription().trim().isEmpty()){
-            this.notesService.deleteNote(noteId);
+        if (action != null && action.equals("delete") || note.getTitle().trim().isEmpty() && note.getDescription().trim().isEmpty()){
+            this.noteService.deleteNote(noteId);
         }else{
             // Updating Note Process
-            Notes preNotes = this.notesService.getNotes(noteId);
-            preNotes.setTitle(notes.getTitle());
-            preNotes.setDescription(notes.getDescription());
-            preNotes.setNotesUpdatedDate(LocalDateTime.now());
-            this.notesService.saveNotes(preNotes);
+            Note preNote = this.noteService.getNotes(noteId);
+            preNote.setTitle(note.getTitle());
+            preNote.setDescription(note.getDescription());
+            preNote.setNotesUpdatedDate(LocalDateTime.now());
+            this.noteService.saveNotes(preNote);
         }
         return "redirect:/user/0/u/dashboard";
     }

@@ -39,6 +39,6 @@ public class User {
     private boolean enable = true;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
-    private List<Notes> notesList = new ArrayList<>();
+    private List<Note> notesList = new ArrayList<>();
 
 }
