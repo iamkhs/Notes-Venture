@@ -27,13 +27,15 @@ function showUpdatePopup(noteLink) {
             selector: '#update-description',
             skin: "oxide-dark",
             content_css: "dark",
-
             height: 400, // Change this height as per your requirement
-            // autoresize_bottom_margin: 20,
         });
     } else {
         // If the editor is already initialized, set its content
-        updateDescriptionEditor.setContent(description);
+        if (description) {
+            updateDescriptionEditor.setContent(description);
+        } else {
+            updateDescriptionEditor.setContent(''); // Set empty content if description is null
+        }
     }
 
     // Set the updated description to the hidden textarea
@@ -42,6 +44,7 @@ function showUpdatePopup(noteLink) {
     document.querySelector("#update-note-popup").style.display = "flex";
     activePopup = "update-note-popup";
 }
+
 
 
 // Function to update the hidden textarea with the updated description from TinyMCE editor
