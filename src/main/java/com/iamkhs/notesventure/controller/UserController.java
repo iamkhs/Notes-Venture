@@ -7,6 +7,7 @@ import com.iamkhs.notesventure.service.NoteService;
 import com.iamkhs.notesventure.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +23,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@AllArgsConstructor
 @Controller
 public class UserController {
 
@@ -29,11 +31,6 @@ public class UserController {
     private final PasswordEncoder passwordEncoder;
     private final NoteService noteService;
 
-    public UserController(UserService userService, PasswordEncoder passwordEncoder, NoteService noteService) {
-        this.userService = userService;
-        this.passwordEncoder = passwordEncoder;
-        this.noteService = noteService;
-    }
 
     // User Dashboard.
     @GetMapping("user/0/u/dashboard")
