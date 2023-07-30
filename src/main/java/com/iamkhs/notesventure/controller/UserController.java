@@ -35,6 +35,7 @@ public class UserController {
         this.noteService = noteService;
     }
 
+    // User Dashboard.
     @GetMapping("user/0/u/dashboard")
     public String dashboard(Principal principal, Model model) {
         String email = principal.getName();
@@ -44,10 +45,9 @@ public class UserController {
 
         List<Note> notesList;
 
-        if (keyword != null  && !keyword.trim().isEmpty()) {
+        if (keyword != null && !keyword.trim().isEmpty()) {
             notesList = this.noteService.searchNotes(user.getId(), keyword);
-        }
-        else {
+        } else {
             notesList = user.getNotesList();
             for (Note note : notesList) {
                 LocalDateTime notesCreatedDate = note.getNotesCreatedDate();
@@ -70,40 +70,45 @@ public class UserController {
 
     // Registration process
     @PostMapping("/form-process")
-    public String registration(@ModelAttribute @Valid User user, BindingResult bindingResult, Model model, HttpSession session){
+    public String registration(@ModelAttribute @Valid User user, BindingResult bindingResult, Model model, HttpSession session) {
 
-        // process the user saving to database.....
-        try{
-            if (bindingResult.hasErrors()){
+        // Process the user saving to the database...
+        try {
+            if (bindingResult.hasErrors()) {
                 model.addAttribute("user", user);
                 return "signup";
             }
 
-            if (!user.getPassword().equals(user.getConfirmPassword())){
+            // Check if the password matches the confirm password field.
+            if (!user.getPassword().equals(user.getConfirmPassword())) {
                 bindingResult.rejectValue("confirmPassword", "error.confirmPassword", "Password and confirm password do not match!");
                 throw new Exception("Password not match!");
             }
 
+            // Setting the user role.
             user.setRole("ROLE_USER");
+
             user.setUserRegisterDate(LocalDateTime.now());
 
-            // PASSWORD ENCODING
+            // PASSWORD ENCODING.
             user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-            // Checking if the email already exists in the database
+            // Checking if the email already exists in the database.
             User existingUser = userService.getUser(user.getEmail());
-            if (existingUser != null){
+            if (existingUser != null) {
                 bindingResult.rejectValue("email", "error.email", "This email is already registered!");
                 throw new Exception("This email is already Registered!");
             }
 
             User savedUser = userService.saveUser(user);
+
             model.addAttribute("user", savedUser);
+
             session.setAttribute("message", new Messages("Successfully Registered", "alert-success"));
 
-        }catch (Exception e){
+        } catch (Exception e) {
             model.addAttribute("user", user);
-            session.setAttribute("message", new Messages("Something went wrong!! "+ e.getMessage(), "alert-danger"));
+            session.setAttribute("message", new Messages("Something went wrong!! " + e.getMessage(), "alert-danger"));
             return "signup";
         }
 
@@ -111,20 +116,21 @@ public class UserController {
     }
 
 
-    // Notes creating process
+    // Notes creating process.
     @PostMapping("/user/creating-notes")
-    public String creatingNotes(@ModelAttribute Note note, Principal principal, HttpSession session){
+    public String creatingNotes(@ModelAttribute Note note, Principal principal, HttpSession session) {
         String email = principal.getName();
 
         User user = this.userService.getUser(email);
 
         // if user filled the title and description empty!
-        if (note.getTitle().trim().isEmpty() && note.getDescription().trim().isEmpty()){
+        if (note.getTitle().trim().isEmpty() && note.getDescription().trim().isEmpty()) {
             session.setAttribute("message", new Messages("Something went wrong!", "danger"));
             return "redirect:/user/0/u/dashboard";
         }
 
         note.setUser(user);
+
         note.setNotesCreatedDate(LocalDateTime.now());
 
         this.noteService.saveNotes(note);
@@ -134,11 +140,11 @@ public class UserController {
 
     // Updating Notes
     @PostMapping("/user/update-notes")
-    public String updateNotes(@RequestParam Long noteId, String action, @ModelAttribute Note note){
+    public String updateNotes(@RequestParam Long noteId, String action, @ModelAttribute Note note) {
         // Deleting Note Process
-        if (action != null && action.equals("delete") || note.getTitle().trim().isEmpty() && note.getDescription().trim().isEmpty()){
+        if (action != null && action.equals("delete") || note.getTitle().trim().isEmpty() && note.getDescription().trim().isEmpty()) {
             this.noteService.deleteNote(noteId);
-        }else{
+        } else {
             // Updating Note Process
             Note preNote = this.noteService.getNotes(noteId);
             preNote.setTitle(note.getTitle());
@@ -153,7 +159,7 @@ public class UserController {
     // Processing the searching method
     @GetMapping("/user/search-notes")
     public String searchNotes(@RequestParam(required = false) String keyword, RedirectAttributes redirectAttributes) {
-        if (keyword != null){
+        if (keyword != null) {
             redirectAttributes.addFlashAttribute("keyword", keyword);
         }
         // Redirect to the dashboard
