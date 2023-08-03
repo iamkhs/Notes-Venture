@@ -1,0 +1,114 @@
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -250px;
+    height: 100%;
+    width: 250px;
+    padding-top: 55px;
+    background-color: #343a40; /* Dark gray background */
+    color: #ffffff; /* White text color */
+    transition: all 0.3s;
+}
+
+
+.sidebar.active {
+    left: 0;
+}
+
+.sidebar-close {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    cursor: pointer;
+}
+
+/* Additional CSS to fix the toggle button */
+.navbar-toggler {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 9999; /* Ensure the button stays on top of other content */
+    color: #ffffff; /* White color for the hamburger icon */
+}
+
+/* Add a higher z-index to the navbar to keep it on top */
+.navbar {
+    z-index: 999;
+}
+
+/* Add padding to the body when the sidebar is active */
+body.sidebar-active {
+    padding-left: 250px;
+}
+
+/* Add custom styles for the menu items */
+.list-group-item {
+    display: flex;
+    align-items: center;
+    background-color: #343a40; /* Dark gray background for menu items */
+    border-bottom: 1px solid #4e5257; /* Add a border at the bottom of each menu item */
+    color: #ffffff; /*
+}
+
+.list-group-item:last-child {
+    border-bottom: none; /* Remove the border from the last menu item */
+}
+
+.list-group-item a {
+    text-decoration: none; /* Remove the underline from the link */
+    color: #ffffff; /* Set the text color of the link to white */
+}
+
+/* Change text color of menu items on hover */
+.list-group-item:hover a {
+    color: #d4d2d2; /* Set the text color of the link to white on hover */
+}
+
+.list-group-item i {
+    margin-right: 10px;
+}
+
+/* Change text color of menu items on hover */
+.list-group-item:hover {
+    color: white; /* Orange color on hover */
+    cursor: pointer;
+}
+
+/* Style the sidebar header */
+.sidebar-header {
+    padding: 15px;
+    background-color: #292c33; /* Darker gray for the sidebar header */
+    color: #ffffff; /* White text color for the sidebar header */
+}
+
+/* Adjust the position of the navbar */
+nav.navbar {
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 9999; /* Ensure the navbar is on top of other elements */
+    background-color: #202124; /* Set the dark background color for the navbar */
+    border-bottom: 1px solid #444; /* Add a border at the bottom for a nice look */
+    display: flex;
+    justify-content: center; /* Center the items horizontally */
+    align-items: center; /* Center the items vertically */
+    padding: 10px 0; /* Add some padding to the navbar */
+}
+
+.navbar-brand {
+    color: rgba(255, 255, 255, 0.9); /* Set the color of the navbar brand text */
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.nav-link {
+    color: rgba(255, 255, 255, 0.9); /* Set the color of the navbar links */
+    text-decoration: none;
+    margin-left: 20px; /* Add some space between the links */
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.nav-link:hover {
+    color: rgba(255, 255, 255, 1); /* Set the color of the navbar links on hover */
+}

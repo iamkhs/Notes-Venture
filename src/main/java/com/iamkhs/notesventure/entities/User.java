@@ -1,6 +1,7 @@
 package com.iamkhs.notesventure.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -22,6 +23,7 @@ public class User {
 
     @NotBlank
     @Column(unique = true)
+    @Email
     private String email;
 
     @NotBlank()
@@ -36,9 +38,14 @@ public class User {
 
     private LocalDateTime userRegisterDate;
 
-    private boolean enable = true;
+    private boolean enable = false;
+
+    private String verificationCode;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
     private List<Note> notesList = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
+    private List<TrashNote> trashNotesList = new ArrayList<>();
 
 }

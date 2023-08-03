@@ -5,6 +5,8 @@ import com.iamkhs.notesventure.repository.UserRepository;
 import com.iamkhs.notesventure.service.UserService;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -30,4 +32,39 @@ public class UserServiceImpl implements UserService {
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
+
+    @Override
+    public boolean isUserVerified(String code) {
+
+        // Fetching the User from Database by the Verification Code
+        User user = this.userRepository.findUserByVerificationCode(code);
+
+        if (user == null) {
+            // User not found
+            return false;
+        } else {
+            var currentTime = LocalDateTime.now();
+            var userRegisterDate = user.getUserRegisterDate();
+            // Calculate the time difference (in minutes) between the current time and the registration time
+            long minutes = Duration.between(userRegisterDate, currentTime).toMinutes();
+
+            if (minutes >= 1) {
+                // The verification code is expired because 1 minute passed!
+                // Delete the User so that He can register again.
+                this.userRepository.deleteById(user.getId());
+                return false;
+            } else {
+                // Everything is fine now updating the User
+                user.setEnable(true);
+                user.setVerificationCode(null); // setting the verification code null so that the user cannot try to verify again
+                user.setPassword(user.getPassword()); // couldn't save the user with blank password & confirm password field
+                user.setConfirmPassword(user.getPassword());
+
+                // Saving the User to database
+                this.saveUser(user);
+                return true;
+            }
+        }
+    }
+
 }

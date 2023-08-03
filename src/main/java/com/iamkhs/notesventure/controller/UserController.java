@@ -1,13 +1,19 @@
 package com.iamkhs.notesventure.controller;
 
 import com.iamkhs.notesventure.entities.Note;
+import com.iamkhs.notesventure.entities.TrashNote;
 import com.iamkhs.notesventure.entities.User;
 import com.iamkhs.notesventure.helper.Messages;
 import com.iamkhs.notesventure.service.NoteService;
+import com.iamkhs.notesventure.service.TrashNoteService;
 import com.iamkhs.notesventure.service.UserService;
+import com.iamkhs.notesventure.service.impl.EmailSenderService;
+import jakarta.mail.MessagingException;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +28,7 @@ import java.security.Principal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @AllArgsConstructor
 @Controller
@@ -30,6 +37,8 @@ public class UserController {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final NoteService noteService;
+    private final TrashNoteService trashNoteService;
+    private final EmailSenderService emailSender;
 
 
     // User Dashboard.
@@ -67,7 +76,10 @@ public class UserController {
 
     // Registration process
     @PostMapping("/form-process")
-    public String registration(@ModelAttribute @Valid User user, BindingResult bindingResult, Model model, HttpSession session) {
+    public String registration(@ModelAttribute @Valid User user,
+                               BindingResult bindingResult,
+                               Model model, HttpSession session,
+                               HttpServletRequest request) {
 
         // Process the user saving to the database...
         try {
@@ -97,11 +109,18 @@ public class UserController {
                 throw new Exception("This email is already Registered!");
             }
 
-            User savedUser = userService.saveUser(user);
+            // Generating the verification code and setting to the user
+            String uuid = UUID.randomUUID().toString();
+            String verificationCode = hashedUUID(uuid);
+            user.setVerificationCode(verificationCode);
+
+            // Saving the user to database
+            User savedUser = this.userService.saveUser(user);
+
+            // Sending the verification email to the user
+            sendVerificationEmail(savedUser, request);
 
             model.addAttribute("user", savedUser);
-
-            session.setAttribute("message", new Messages("Successfully Registered", "alert-success"));
 
         } catch (Exception e) {
             model.addAttribute("user", user);
@@ -109,9 +128,51 @@ public class UserController {
             return "signup";
         }
 
+        return "registration-success";
+    }
+
+    // Sending the verification code to user
+    private void sendVerificationEmail(User savedUser, HttpServletRequest request) throws MessagingException {
+        String toEmail = savedUser.getEmail();
+        String subject = "Please Verify your registration";
+        String mailContent = messageContent(savedUser, request);
+
+        // Finally Sending the Verification email
+        emailSender.sendEmail(toEmail, subject, mailContent);
+    }
+
+    // Verifying Process
+    @GetMapping("form-process/verify")
+    public String verifyUser(@RequestParam String code, HttpSession session) {
+        if (userService.isUserVerified(code)) {
+            // User Verify successfully
+            session.setAttribute("message", new Messages("Account Verified Successfully.", "alert-success"));
+        } else {
+            session.setAttribute("message", new Messages("Something went wrong or Invalid verification code!", "alert-danger"));
+        }
         return "redirect:/login";
     }
 
+    // Body of the Verification email
+    private String messageContent(User user, HttpServletRequest request) {
+        String mailContent = "<p style=\"font-size: 16px;\">Dear " + user.getName() + ",</p>";
+        mailContent += "<p style=\"font-size: 16px;\">Please click the link below to verify your registration:</p>";
+
+        String verifyUrl = request.getRequestURL().toString();
+        verifyUrl += "/verify?code=" + user.getVerificationCode();
+
+        mailContent += "<h3 style=\"font-size: 18px;\"><a href=\"" + verifyUrl + "\">VERIFY</a></h3>";
+        mailContent += "<p style=\"font-size: 14px;\"><strong>This verification link will expire in one minute. " +
+                "If you don't verify your registration within one minute, " +
+                "you will need to register again.</strong></p>";
+        mailContent += "<p style=\"font-size: 16px;\"><strong>Thank You.</strong><br>The <strong>NotesVenture Team</strong></p>";
+        return mailContent;
+    }
+
+    // Hashing the UUID for security
+    private String hashedUUID(String uuid) {
+        return DigestUtils.sha256Hex(uuid);
+    }
 
     // Notes creating process.
     @PostMapping("/user/creating-notes")
@@ -138,16 +199,34 @@ public class UserController {
     // Updating Notes
     @PostMapping("/user/update-notes")
     public String updateNotes(@RequestParam Long noteId, String action, @ModelAttribute Note note) {
-        // Deleting Note Process
+
+        Note oldNote = noteService.getNotes(noteId);
+
         if (action != null && action.equals("delete") || note.getTitle().trim().isEmpty() && note.getDescription().trim().isEmpty()) {
+            // Deleting Note Process
+
+            // Setting the value to new trash note
+            TrashNote trashNote = new TrashNote();
+            trashNote.setTitle(oldNote.getTitle());
+            trashNote.setDescription(oldNote.getDescription());
+            trashNote.setNotesCreatedDate(oldNote.getNotesCreatedDate());
+            trashNote.setNotesUpdatedDate(oldNote.getNotesUpdatedDate());
+            trashNote.setNoteDeletedDate(LocalDateTime.now());
+            trashNote.setUser(oldNote.getUser());
+
+            // Saving the old note on the trash note
+            this.trashNoteService.saveTrashNote(trashNote);
+
+            // Now Deleting the old note
             this.noteService.deleteNote(noteId);
         } else {
             // Updating Note Process
-            Note preNote = this.noteService.getNotes(noteId);
-            preNote.setTitle(note.getTitle());
-            preNote.setDescription(note.getDescription());
-            preNote.setNotesUpdatedDate(LocalDateTime.now());
-            this.noteService.saveNotes(preNote);
+            oldNote.setTitle(note.getTitle());
+            oldNote.setDescription(note.getDescription());
+            oldNote.setNotesUpdatedDate(LocalDateTime.now());
+
+            // Saving the note to database
+            this.noteService.saveNotes(oldNote);
         }
         return "redirect:/user/0/u/dashboard";
     }

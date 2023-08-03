@@ -3,16 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <title>Home Page</title>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
+    <!-- Link to Font Awesome CSS -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
+
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/sidebar.css}">
+
     <!-- Boxicons -->
     <link href="https://cdn.jsdelivr.net/npm/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet">
 
     <!-- Include TinyMCE -->
     <script src="https://cdn.tiny.cloud/1/ly2ttayt6bwot1bffllzhjt1utzx8jwqjrf6npnmy8lcm8ob/tinymce/6/tinymce.min.js"
             referrerpolicy="origin"></script>
+
     <!-- Include the dark theme CSS -->
     <link href="https://cdn.jsdelivr.net/npm/tinymce@5.10.2/themes/oxide-dark/skins/ui/oxide-dark/content.css"
           rel="stylesheet">
@@ -22,6 +30,14 @@
 
 <!--navbar-->
 <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #202124;">
+
+    <!-- Custom button to open the sidebar -->
+    <button class="sidebar-toggler mr-3 border-0 bg-transparent" type="button">
+        <img style="height: 30px; width: 30px; margin-left: 10px"
+             src="/img/menu.png"
+             alt="Open Sidebar"/>
+    </button>
+
     <div class="container-fluid">
         <!-- Brand -->
         <a class="navbar-brand" href="/user/0/u/dashboard">NotesVenture</a>
@@ -33,13 +49,9 @@
         </form>
 
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <!-- Nav Items -->
-            <ul class="navbar-nav ms-auto mb-2 mb-lg-0 text-uppercase">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
 
                 <!--        home-->
                 <li class="nav-item">
@@ -49,7 +61,7 @@
 
                 <!-- Username -->
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" th:href="@{/user/0/u/profile}">
                         <span th:text="${user.name}"></span>
                     </a>
                 </li>
@@ -65,6 +77,29 @@
 <!-- End Navbar -->
 
 
+<!-- Sidebar -->
+<div id="sidebar" class="sidebar">
+    <div class="sidebar-header">
+        <span th:size="10px">Menu</span>
+    </div>
+
+    <button class="btn btn-danger sidebar-close border-0 bg-transparent" type="button">
+        <img style="height: 16px" width="16px" src="/img/close.png" alt=""/>
+    </button>
+
+    <ul class="list-group">
+        <li class="list-group-item"><i class="fas fa-home"></i>
+            <a href="/">Home</a>
+        </li>
+        <li class="list-group-item">
+            <i class="fas fa-trash-alt"></i>
+            <a href="/user/0/u/trash-notes">Trash</a>
+        </li>
+    </ul>
+</div>
+<!--End Sidebar-->
+
+
 <!--processing the notes-->
 <div class="container">
 
@@ -72,13 +107,12 @@
     <div th:if="${session.message}" style="margin-top: 50px">
         <div th:classappend="${'alert-'+ session.message.type}" class="alert text-center" role="alert">
             <span th:text="${session.message.content}"></span>
+            <!--        removing the session-->
+            <th:block th:text="${@sessionHelper.removeSession()}"></th:block>
         </div>
-
-        <!--        removing the session-->
-        <th:block th:text="${@sessionHelper.removeSession()}"></th:block>
     </div>
 
-    <div class="row mt-5">
+    <div class="row">
         <!-- Use th:if to check if noteList is empty -->
         <div th:if="${noteList.isEmpty()}" class="col">
             <div class="no-notes-message">
@@ -224,5 +258,12 @@
         lists_indent_on_tab: false
     });
 </script>
+
+<!-- Link to Bootstrap and custom JavaScript -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!-- Link to your custom JavaScript -->
+<script src="/js/sidebar.js"></script>
 </body>
 </html>

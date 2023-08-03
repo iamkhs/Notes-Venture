@@ -31,12 +31,12 @@
                             Successfully logged out
                         </div>
 
-                        <div th:if="${session.message}" class="alert alert-success">
-                            <span th:text="${session.message.content}"></span>
-                        </div>
+                        <div th:if="${session.message}" th:classappend="${session.message.type}" class="alert text-center">
+                            <p th:text="${session.message.content}"></p>
 
-<!--                        Removing the SESSION attribute-->
-                        <th:block th:text="${@sessionHelper.removeSession()}"></th:block>
+<!--                            Removing the SESSION attribute-->
+                            <th:block th:text="${@sessionHelper.removeSession()}"></th:block>
+                        </div>
 
                     </div>
 
