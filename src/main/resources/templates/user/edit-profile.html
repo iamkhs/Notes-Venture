@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile Details</title>
+    <title>Edit Profile</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
     <!-- Link to Font Awesome CSS -->
     <link rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
 
     <link rel="stylesheet" th:href="@{/css/profile-details.css}">
     <link rel="stylesheet" href="/css/sidebar.css">
@@ -79,38 +79,46 @@
 
 <div class="container">
     <div class="profile-card dark-mode">
+        <!-- Error message box -->
+        <div th:if="${session.message}" style="margin-top: 50px">
+            <div th:classappend="${'alert-'+ session.message.type}" class="alert text-center" role="alert">
+                <span th:text="${session.message.content}"></span>
+                <!--        removing the session-->
+                <th:block th:text="${@sessionHelper.removeSession()}"></th:block>
+            </div>
+        </div>
+
         <div class="profile-header">
             <h2>Profile Information</h2>
             <img src="/img/default-avatar.png" class="rounded-circle" alt="Avatar">
         </div>
+
+        <form th:action="@{/user/update-user}" method="post">
         <div class="profile-info">
+<!--            Username-->
             <div class="form-group">
                 <label for="name">Name:</label>
-                <input th:value="${user.name}" type="text" class="form-control" id="name" value="John Doe" readonly>
+                <input name="name" th:value="${user.name}" type="text" class="form-control" id="name">
             </div>
+
+            <p>Change Your Password:</p>
+<!--            User Old Password-->
             <div class="form-group">
-                <label for="email">Email:</label>
-                <input th:value="${user.email}" type="email" class="form-control" id="email"
-                       value="john.doe@example.com" readonly>
+                <label for="oldPassword">Old Password:</label>
+                <input name="oldPassword" type="password" class="form-control" id="oldPassword">
             </div>
+
+<!--            User New Password-->
             <div class="form-group">
-                <label for="reg-date">Registration Date:</label>
-                <input th:value="${user.userRegisterDate}" type="text" class="form-control" id="reg-date"
-                       value="2023-07-31" readonly>
+                <label for="newPassword">New Password:</label>
+                <input name="password" type="text" class="form-control" id="newPassword">
             </div>
-            <div class="form-group">
-                <label for="role">Role:</label>
-                <input th:value="User" type="text" class="form-control" id="role" value="Admin" readonly>
-            </div>
-            <div class="form-group">
-                <label for="status">Account Status:</label>
-                <input th:value="${user.isEnable()}" type="text" class="form-control" id="status" value="Active"
-                       readonly>
-            </div>
+
         </div>
         <div class="profile-footer">
-            <a th:href="@{/user/update-profile}" type="button" class="btn btn-outline-primary">Edit Profile</a>
+            <button type="submit" class="btn btn-outline-primary">Save</button>
         </div>
+        </form>
     </div>
 </div>
 

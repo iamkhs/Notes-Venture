@@ -3,6 +3,7 @@ package com.iamkhs.notesventure.controller;
 import com.iamkhs.notesventure.entities.Note;
 import com.iamkhs.notesventure.entities.TrashNote;
 import com.iamkhs.notesventure.entities.User;
+import com.iamkhs.notesventure.exceptions.UserAlreadyRegisteredException;
 import com.iamkhs.notesventure.helper.Messages;
 import com.iamkhs.notesventure.service.NoteService;
 import com.iamkhs.notesventure.service.TrashNoteService;
@@ -106,7 +107,7 @@ public class UserController {
             User existingUser = userService.getUser(user.getEmail());
             if (existingUser != null) {
                 bindingResult.rejectValue("email", "error.email", "This email is already registered!");
-                throw new Exception("This email is already Registered!");
+                throw new UserAlreadyRegisteredException();
             }
 
             // Generating the verification code and setting to the user
