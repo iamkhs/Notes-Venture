@@ -9,4 +9,5 @@ public interface UserService {
     User getUser(String email);
     List<User> getAllUsers();
     boolean isUserVerified(String code);
+    boolean verifyUserByOTP(String otp);
 }

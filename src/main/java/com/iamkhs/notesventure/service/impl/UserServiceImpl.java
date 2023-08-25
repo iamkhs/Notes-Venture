@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getAllUsers() {
-        return userRepository.findAll();
+        return userRepository.findAllByRole("ROLE_USER");
     }
 
     @Override
@@ -67,4 +67,22 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+
+    // Verifying the User by OTP
+    @Override
+    public boolean verifyUserByOTP(String otp) {
+        User user = this.userRepository.findUserByVerificationCode(otp);
+        if (user == null){
+            // Invalid OTP
+            return false;
+        }else{
+            // User is verified
+            user.setVerificationCode(null); // setting the verification code null
+            user.setPassword(user.getPassword());
+
+            // Saving the User to Database
+            this.userRepository.save(user);
+            return true;
+        }
+    }
 }

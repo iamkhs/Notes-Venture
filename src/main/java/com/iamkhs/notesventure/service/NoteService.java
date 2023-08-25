@@ -10,4 +10,6 @@ public interface NoteService {
     Note getNotes(Long id);
 
     List<Note> searchNotes(Long id, String keyword);
+
+    List<Note> totalNotes();
 }

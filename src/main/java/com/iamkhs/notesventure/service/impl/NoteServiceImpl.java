@@ -36,4 +36,8 @@ public class NoteServiceImpl implements NoteService {
         return this.noteRepository.searchNotesByUserIdAndKeyword(id, keyword);
     }
 
+    @Override
+    public List<Note> totalNotes() {
+        return this.noteRepository.findAll();
+    }
 }

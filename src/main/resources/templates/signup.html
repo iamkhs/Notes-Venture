@@ -15,6 +15,44 @@
 </head>
 <body>
 
+<!--navbar-->
+<nav class="navbar navbar-expand-lg navbar-dark " style="background-color: #46a3eb">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">NotesVenture</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0 text-uppercase">
+
+                <!--        home-->
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/user/0/u/dashboard">
+                        Home</a>
+                </li>
+
+
+                <!--        login-->
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/login}" tabindex="-1" aria-disabled="true">Login</a>
+                </li>
+
+                <!--        signup-->
+                <li class="nav-item">
+                    <a class="nav-link" href="/signup" tabindex="-1" aria-disabled="true">Signup</a>
+                </li>
+
+            </ul>
+
+
+        </div>
+    </div>
+</nav>
+<!--End Navbar-->
+
 <div class="container">
     <div class="row mt-5">
         <div class="col-md-5 offset-md-4">
