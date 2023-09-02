@@ -18,6 +18,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
 import java.util.List;
+/**
+ * This controller class handles actions related to trash notes, including displaying the trash notes dashboard,
+ * and processing actions such as deleting or restoring trash notes.
+ *
+ */
 
 @Controller
 @AllArgsConstructor

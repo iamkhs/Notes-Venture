@@ -15,6 +15,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.security.SecureRandom;
 import java.util.Timer;
 import java.util.TimerTask;
+/**
+ * This controller class handles the "Forgot Password" functionality, including generating and verifying OTP for password reset.
+ * It also allows users to set a new password after OTP verification.
+ *
+ */
 
 @Controller
 public class ForgotPassword {
