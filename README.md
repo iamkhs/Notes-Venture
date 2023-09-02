@@ -1,6 +1,6 @@
 # NotesVenture - Your Personal Note-Taking App
 
-Welcome to NotesVenture, your ultimate note-taking companion! This user-friendly web application, inspired by Google Keep Notes, simplifies your note-taking experience. With essential features like creating, updating, and deleting notes.
+Welcome to NotesVenture, your ultimate note-taking companion! This user-friendly web application, inspired by Google Keep Notes, simplifies your note-taking experience with essential features like creating, updating, and deleting notes.
 
 ## Features:
 
@@ -11,6 +11,8 @@ Welcome to NotesVenture, your ultimate note-taking companion! This user-friendly
 - **A Trash Note feature is available.**
 - **Search functionality for notes is included.**
 - **Users can update their profiles.**
+- **Users can reset passwords by OTP Verification.**
+- **Admin Panel UI Implemented**
 
 ## Technologies Used:
 
