@@ -39,7 +39,6 @@ public class ForgotPassword {
     // Forgot Password Handler
     @PostMapping("/processing")
     public String forgotPassword(@RequestParam String email, HttpSession session) throws MessagingException {
-        System.err.println(email);
 
         user = this.userService.getUser(email);
 

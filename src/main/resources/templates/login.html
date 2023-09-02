@@ -98,17 +98,36 @@
                     </div>
 
                     <div class="container text-center">
-                        <button type="submit" class="btn btn-primary">Login</button>
+                        <button type="submit" class="btn btn-primary btn-login">Login</button>
                     </div>
 
-                    <div class="text-right">
-                        <a target="_blank" class="text-info" href="/signup">Register here</a>
+                    <div class="container">
+                        <div class="text-right">
+                            <a target="_blank" class="text-info" href="/signup">Register here</a>
+                        </div>
+
+                        <div class="text-right mt-3">
+                            <a class="text-info" href="/forgot-password">Forgot Password?</a>
+                        </div>
                     </div>
 
-                    <div class="text-right mt-3">
-                        <a class="text-info" href="/forgot-password" style="font-size: 14px;">Forgot Password?</a>
+
+                    <div class="text-center mt-3">
+                        <div class="separator">
+                            <hr class="separator-line separator-line-left">
+                            <span class="or-text">OR</span>
+                            <hr class="separator-line separator-line-right">
+                        </div>
                     </div>
 
+                    <div class="text-center">
+                        <a th:href="@{/oauth2/authorization/google}">
+                            <div class="google-button">
+                                <img src="/img/google-logo.png" alt="Google Icon" class="google-icon">
+                                Continue with Google
+                            </div>
+                        </a>
+                    </div>
                 </form>
 
             </div>

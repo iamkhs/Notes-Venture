@@ -1,5 +1,6 @@
 package com.iamkhs.notesventure.config;
 
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -10,11 +11,14 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 @Configuration
 @EnableWebSecurity
+@AllArgsConstructor
 public class SecurityConfig {
+
+
+    private CustomLoginSuccessHandler authenticationSuccessHandler;
 
     @Bean
     public UserDetailsService userDetailsService(){
@@ -34,10 +38,6 @@ public class SecurityConfig {
         return daoAuthenticationProvider;
     }
 
-    @Bean
-    public AuthenticationSuccessHandler authenticationSuccessHandler(){
-        return new CustomLoginSuccessHandler();
-    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -45,7 +45,7 @@ public class SecurityConfig {
         http.cors(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth->
-                        auth.requestMatchers("/user/**").hasRole("USER")
+                        auth.requestMatchers("/user/**").hasAnyAuthority("ROLE_USER", "OIDC_USER")
                                 .requestMatchers("/admin/**").hasRole("ADMIN")
                                 .requestMatchers("/**").permitAll())
 
@@ -55,7 +55,12 @@ public class SecurityConfig {
 
                 .formLogin(form-> form.loginPage("/login")
                         .loginProcessingUrl("/do-login")
-                        .successHandler(authenticationSuccessHandler()))
+                        .successHandler(authenticationSuccessHandler))
+
+                .oauth2Login(auth-> {
+                    auth.loginPage("/login");
+                    auth.successHandler(authenticationSuccessHandler);
+                })
 
                 .authenticationProvider(daoAuthenticationProvider());
 

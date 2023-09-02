@@ -3,13 +3,18 @@ package com.iamkhs.notesventure.controller;
 import com.iamkhs.notesventure.entities.Note;
 import com.iamkhs.notesventure.entities.TrashNote;
 import com.iamkhs.notesventure.entities.User;
+import com.iamkhs.notesventure.helper.UserServiceUtil;
 import com.iamkhs.notesventure.service.NoteService;
 import com.iamkhs.notesventure.service.TrashNoteService;
-import com.iamkhs.notesventure.service.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
 import java.util.List;
@@ -20,14 +25,14 @@ import java.util.List;
 public class TrashNoteController {
 
     private final TrashNoteService trashNoteService;
-    private final UserService userService;
     private final NoteService noteService;
+    private final UserServiceUtil userServiceUtil;
 
     // Display the Trash Notes dashboard for the current user
     @GetMapping("/0/u/trash-notes")
-    public String trashNotePage(Model model, Principal principal) {
+    public String trashNotePage(Model model, Principal principal, @AuthenticationPrincipal OAuth2User oAuth2User) {
         // Get the currently logged-in user
-        User user = this.userService.getUser(principal.getName());
+        User user = this.userServiceUtil.getLoggedUser(principal, oAuth2User);
 
         // Retrieve all the trash notes for the user
         List<TrashNote> trashNotesList = trashNoteService.getAllTrashNotes(user.getId());
@@ -46,7 +51,6 @@ public class TrashNoteController {
         if (action != null && action.equals("delete")) {
             // Delete the note from the trash
             trashNoteService.deleteNoteById(id);
-            System.err.println("Note deleted successfully");
         } else {
             // If the action is to restore the note
             // Get the trash note by its id
@@ -62,7 +66,6 @@ public class TrashNoteController {
 
             // Save the recovered note
             this.noteService.saveNotes(note);
-            System.err.println("Note Recover Successfully");
 
             // Delete the note from the trash after recovery
             this.trashNoteService.deleteNoteById(id);

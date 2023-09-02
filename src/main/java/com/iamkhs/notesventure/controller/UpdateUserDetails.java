@@ -2,10 +2,13 @@ package com.iamkhs.notesventure.controller;
 
 import com.iamkhs.notesventure.entities.User;
 import com.iamkhs.notesventure.helper.Messages;
+import com.iamkhs.notesventure.helper.UserServiceUtil;
 import com.iamkhs.notesventure.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -20,18 +23,22 @@ public class UpdateUserDetails {
 
     private final UserService userService;
     private PasswordEncoder passwordEncoder;
+    private UserServiceUtil userServiceUtil;
+
+
 
     @GetMapping("/update-profile")
-    public String updateProfileHandler(Principal principal, Model model){
-        User user = userService.getUser(principal.getName());
-        model.addAttribute("user", user);
+    public String updateProfileHandler(Principal principal, @AuthenticationPrincipal OAuth2User oAuth2User, Model model){
+        User loggedUser = this.userServiceUtil.getLoggedUser(principal, oAuth2User);
+
+        model.addAttribute("user", loggedUser);
         return "/user/edit-profile";
     }
 
 
     @PostMapping("/update-user")
-    public String updateProfile(@ModelAttribute User user, @RequestParam String oldPassword, Principal principal, HttpSession session){
-        User loggedUser = userService.getUser(principal.getName());
+    public String updateProfile(@ModelAttribute User user, @RequestParam String oldPassword, Principal principal, @AuthenticationPrincipal OAuth2User oAuth2User, HttpSession session){
+        User loggedUser = this.userServiceUtil.getLoggedUser(principal, oAuth2User);
 
         boolean updated;
 

@@ -5,6 +5,7 @@ import com.iamkhs.notesventure.entities.TrashNote;
 import com.iamkhs.notesventure.entities.User;
 import com.iamkhs.notesventure.exceptions.UserAlreadyRegisteredException;
 import com.iamkhs.notesventure.helper.Messages;
+import com.iamkhs.notesventure.helper.UserServiceUtil;
 import com.iamkhs.notesventure.service.NoteService;
 import com.iamkhs.notesventure.service.TrashNoteService;
 import com.iamkhs.notesventure.service.UserService;
@@ -15,7 +16,9 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -40,13 +43,14 @@ public class UserController {
     private final NoteService noteService;
     private final TrashNoteService trashNoteService;
     private final EmailSenderService emailSender;
+    private final UserServiceUtil userServiceUtil;
 
 
     // User Dashboard.
     @GetMapping("user/0/u/dashboard")
-    public String dashboard(Principal principal, Model model) {
-        String email = principal.getName();
-        User user = this.userService.getUser(email);
+    public String dashboard(Principal principal, @AuthenticationPrincipal OAuth2User oAuth2User, Model model) {
+
+        User user = this.userServiceUtil.getLoggedUser(principal, oAuth2User);
 
         String keyword = (String) model.asMap().get("keyword");
 
@@ -177,10 +181,9 @@ public class UserController {
 
     // Notes creating process.
     @PostMapping("/user/creating-notes")
-    public String creatingNotes(@ModelAttribute Note note, Principal principal, HttpSession session) {
-        String email = principal.getName();
+    public String creatingNotes(@ModelAttribute Note note, Principal principal,@AuthenticationPrincipal OAuth2User oAuth2User, HttpSession session) {
 
-        User user = this.userService.getUser(email);
+        User user = this.userServiceUtil.getLoggedUser(principal, oAuth2User);
 
         // if user filled the title and description empty!
         if (note.getTitle().trim().isEmpty() && note.getDescription().trim().isEmpty()) {
