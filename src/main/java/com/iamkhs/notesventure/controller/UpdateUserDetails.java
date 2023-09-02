@@ -15,6 +15,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.Objects;
+/**
+ * This controller class handles user profile updates, including name and password changes.
+ * It is responsible for rendering the user profile update page and processing user input.
+ *
+ */
 
 @Controller
 @RequestMapping("/user")
@@ -29,6 +34,8 @@ public class UpdateUserDetails {
 
     @GetMapping("/update-profile")
     public String updateProfileHandler(Principal principal, @AuthenticationPrincipal OAuth2User oAuth2User, Model model){
+
+        // Get the currently logged-in user
         User loggedUser = this.userServiceUtil.getLoggedUser(principal, oAuth2User);
 
         model.addAttribute("user", loggedUser);

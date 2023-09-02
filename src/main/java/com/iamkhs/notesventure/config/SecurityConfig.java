@@ -11,6 +11,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+/**
+ * This configuration class is responsible for configuring security settings in the application.
+ * It defines security rules, authentication providers, and handles authentication success.
+ *
+ */
 
 @Configuration
 @EnableWebSecurity

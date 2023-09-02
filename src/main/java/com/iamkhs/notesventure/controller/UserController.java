@@ -33,6 +33,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+/**
+ * This controller class handles various user-related operations including registration, dashboard display, note management, and searching.
+ *
+ */
 
 @AllArgsConstructor
 @Controller
@@ -46,20 +50,33 @@ public class UserController {
     private final UserServiceUtil userServiceUtil;
 
 
-    // User Dashboard.
+    /**
+     * This method handles the user dashboard page, displaying the user's notes and related information.
+     *
+     * @param principal     The Principal object representing the currently logged-in user.
+     * @param oAuth2User    The OAuth2User object representing user information from OAuth2 authentication.
+     * @param model         The Model object for adding attributes to the view.
+     * @return              The name of the view template to be rendered (in this case, "user/dashboard").
+     */
     @GetMapping("user/0/u/dashboard")
     public String dashboard(Principal principal, @AuthenticationPrincipal OAuth2User oAuth2User, Model model) {
 
+        // Get the currently logged-in user
         User user = this.userServiceUtil.getLoggedUser(principal, oAuth2User);
 
+        // Retrieve the keyword from the model (used for note search)
         String keyword = (String) model.asMap().get("keyword");
 
         List<Note> notesList;
 
         if (keyword != null && !keyword.trim().isEmpty()) {
+            // If a keyword is provided, perform a note search for the user
             notesList = this.noteService.searchNotes(user.getId(), keyword);
         } else {
+            // If no keyword is provided, retrieve the user's notes
             notesList = user.getNotesList();
+
+            // Process note creation and update dates for better display
             for (Note note : notesList) {
                 LocalDateTime notesCreatedDate = note.getNotesCreatedDate();
                 LocalDateTime notesUpdateDate = note.getNotesUpdatedDate();
@@ -73,9 +90,12 @@ public class UserController {
                 }
             }
         }
-        model.addAttribute("noteList", notesList);
 
+        // Add the list of notes and the user object to the model for rendering in the view
+        model.addAttribute("noteList", notesList);
         model.addAttribute("user", user);
+
+        // Return the name of the view template to be rendered
         return "user/dashboard";
     }
 
