@@ -7,6 +7,7 @@ Welcome to NotesVenture, your ultimate note-taking companion! This user-friendly
 - **Users can create their accounts.**
 - **Role-based authentication ensures that admins and regular users are directed to different landing pages upon login.**
 - **Email verification is implemented, requiring users to confirm their accounts via email after registration.**
+- **User can login with Google account**
 - **The app supports note creation, deletion, and updating.**
 - **A Trash Note feature is available.**
 - **Search functionality for notes is included.**
