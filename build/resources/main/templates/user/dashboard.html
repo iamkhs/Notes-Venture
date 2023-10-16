@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Home Page</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <!-- Link to Font Awesome CSS -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/sidebar.css}">
+
+    <!-- Boxicons -->
+    <link href="https://cdn.jsdelivr.net/npm/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet">
+
+    <!-- Include TinyMCE -->
+    <script src="https://cdn.tiny.cloud/1/ly2ttayt6bwot1bffllzhjt1utzx8jwqjrf6npnmy8lcm8ob/tinymce/6/tinymce.min.js"
+            referrerpolicy="origin"></script>
+
+    <!-- Include the dark theme CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tinymce@5.10.2/themes/oxide-dark/skins/ui/oxide-dark/content.css"
+          rel="stylesheet">
+
+</head>
+<body>
+
+<!--navbar-->
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #202124;">
+
+    <!-- Custom button to open the sidebar -->
+    <button class="sidebar-toggler mr-3 border-0 bg-transparent" type="button">
+        <img style="height: 30px; width: 30px; margin-left: 10px"
+             src="/img/menu.png"
+             alt="Open Sidebar"/>
+    </button>
+
+    <div class="container-fluid">
+        <!-- Brand -->
+        <a class="navbar-brand" href="/user/0/u/dashboard">NotesVenture</a>
+
+        <!--        Search Box-->
+        <form th:action="@{/user/search-notes}" th:method="GET" class="search-box d-flex align-items-center">
+            <input type="text" name="keyword" placeholder="Search Your Notes" class="search-input"/>
+            <button type="submit" id="search"><i class='bx bx-search search-icon'></i></button>
+        </form>
+
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <!-- Nav Items -->
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+
+                <!--        home-->
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/">
+                        Home</a>
+                </li>
+
+                <!-- Username -->
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/user/0/u/profile}">
+                        <span th:text="${user.name}"></span>
+                    </a>
+                </li>
+
+                <!-- Logout -->
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/logout}">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<!-- End Navbar -->
+
+
+<!-- Sidebar -->
+<div id="sidebar" class="sidebar">
+    <div class="sidebar-header">
+        <span th:size="10px">Menu</span>
+    </div>
+
+    <button class="btn btn-danger sidebar-close border-0 bg-transparent" type="button">
+        <img style="height: 16px" width="16px" src="/img/close.png" alt=""/>
+    </button>
+
+    <ul class="list-group">
+        <li class="list-group-item"><i class="fas fa-home"></i>
+            <a href="/">Home</a>
+        </li>
+        <li class="list-group-item">
+            <i class="fas fa-trash-alt"></i>
+            <a href="/user/0/u/trash-notes">Trash</a>
+        </li>
+    </ul>
+</div>
+<!--End Sidebar-->
+
+
+<!--processing the notes-->
+<div class="container">
+
+    <!-- Error message box -->
+    <div th:if="${session.message}" style="margin-top: 50px">
+        <div th:classappend="${'alert-'+ session.message.type}" class="alert text-center" role="alert">
+            <span th:text="${session.message.content}"></span>
+            <!--        removing the session-->
+            <th:block th:text="${@sessionHelper.removeSession()}"></th:block>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Use th:if to check if noteList is empty -->
+        <div th:if="${noteList.isEmpty()}" class="col">
+            <div class="no-notes-message">
+                <h1>No Notes Found!</h1>
+            </div>
+        </div>
+
+        <div th:each="notes : ${noteList}" class="col">
+
+            <!-- Use onclick attribute to call the showPopup() function on click and pass the title, description, and note ID -->
+            <a href="#" class="card mt-5 note-link"
+               th:attr="data-noteid=${notes.getId()}, data-title=${notes.getTitle()}, data-description=${notes.getDescription()}"
+               onclick="showPopup(this)">
+                <!-- Replace "bx-icon" with the desired Boxicon name -->
+                <div class="card-icon">
+                    <i class='bx bx-icon'></i>
+                </div>
+                <div class="card-content">
+                    <span style="color: white" th:text="${notes.getTitle()}"></span>
+                    <br/>
+                    <span th:utext="${notes.getDescription()}"></span>
+                </div>
+                <!-- Add a div for notes created date -->
+                <div class="card-footer" style="color: #888; font-size: 14px;">
+                    <span th:if="${notes.getNotesUpdatedDate() == null}"
+                          th:text="${notes.getNotesCreatedDate()}"></span>
+                    <span th:if="${notes.getNotesUpdatedDate() != null}"
+                          th:text="${notes.getNotesUpdatedDate()}"></span>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+
+
+<!-- Floating Button -->
+<div class="floating-button">
+    <a href="#" id="create-note">
+        <i class='bx bx-plus floating-button-icon'></i>
+    </a>
+</div>
+
+<!-- Creating new notes -->
+<div class="popup-container" id="create-note-popup">
+    <div class="popup-card">
+        <div class="popup-header">Create a new Note</div>
+        <div class="popup-content">
+
+
+            <!-- Form to create new note -->
+            <form th:method="post" th:action="@{/user/creating-notes}" class="needs-validation">
+                <!-- Title field -->
+                <div class="mb-3">
+                    <label for="title" class="form-label">Note Title</label>
+                    <input name="title" type="text" class="form-control" id="title">
+                    <div class="invalid-feedback">
+                        Please enter a title.
+                    </div>
+                </div>
+
+                <!-- Description field -->
+                <div class="mb-3">
+                    <label for="description" class="form-label">Note Description</label>
+                    <textarea rows="14" name="description" class="form-control" id="description"></textarea>
+                    <div class="invalid-feedback">
+                        Please enter a description.
+                    </div>
+                </div>
+
+                <!-- Submit button -->
+                <div class="popup-submit">
+                    <button type="submit" class="btn btn-outline-primary">Save</button>
+                </div>
+            </form>
+
+        </div>
+        <div class="popup-close" onclick="hidePopup()">&times;</div>
+    </div>
+</div>
+
+
+<!--THIS IS FOR UPDATE NOTE-->
+<div class="popup-container" id="update-note-popup">
+    <div class="popup-card">
+        <div class="popup-header">Update Note</div>
+        <div class="popup-content">
+
+            <!-- Form to update an existing note -->
+            <form id="update-form" th:method="post" th:action="@{/user/update-notes}">
+                <!-- Hidden input field to store the note ID -->
+                <input type="hidden" id="note-id" name="noteId">
+
+                <!-- Title field -->
+                <div class="mb-3">
+                    <label for="update-title" class="form-label">Note Title</label>
+                    <input name="title" type="text" class="form-control" id="update-title">
+                    <div class="invalid-feedback">
+                        Please enter a title.
+                    </div>
+                </div>
+
+                <!-- Description field using TinyMCE editor -->
+                <div class="mb-3">
+                    <label for="update-description" class="form-label">Note Description</label>
+                    <div id="update-description"></div>
+                    <textarea name="description" id="update-description-hidden" style="display: none;"></textarea>
+                    <div class="invalid-feedback">
+                        Please enter a description.
+                    </div>
+                </div>
+
+                <div class="popup-submit">
+                    <!-- Submit button -->
+                    <div style="display: inline-block; margin-right: 10px;">
+                        <button type="button" class="btn btn-outline-primary" onclick="submitForm()">Update</button>
+                    </div>
+
+                    <!-- Custom delete button -->
+                    <div style="display: inline-block;">
+                        <button type="submit" class="btn btn-outline-danger" name="action" value="delete">Delete
+                        </button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+        <div class="popup-close" onclick="hideUpdatePopup()">&times;</div>
+    </div>
+</div>
+
+<!-- Include the necessary scripts -->
+<script src="/js/script.js"></script>
+
+
+<script>
+    tinymce.init({
+        selector: '#description',
+        // Specify the dark theme
+        skin: "oxide-dark",
+        content_css: "dark",
+        plugins: 'lists',
+        toolbar: 'numlist bullist',
+        lists_indent_on_tab: false
+    });
+</script>
+
+<!-- Link to Bootstrap and custom JavaScript -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!-- Link to your custom JavaScript -->
+<script src="/js/sidebar.js"></script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>All Users</title>
+</head>
+<body>
+
+<div class="col-md-9">
+  <div class="card">
+    <div class="card-body">
+      <h1 class="text-center">Welcome to The Admin Panel</h1>
+      <table class="table">
+        <thead>
+        <tr>
+          <th scope="col">#ID</th>
+          <th scope="col">Name</th>
+          <th scope="col">Email</th>
+          <th scope="col">Active</th>
+          <th scope="col">Role</th>
+          <th scope="col">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="u : ${allUsers}">
+          <th th:text="${u.getId()}" scope="row">1</th>
+          <td th:text="${u.getName()}">Mark</td>
+          <td th:text="${u.getEmail()}">Otto</td>
+          <td th:text="${u.isEnable()}">Otto</td>
+          <td th:text="USER"></td>
+
+          <td>
+            <button class="btn btn-danger btn-sm">Delete</button>
+            <button class="btn btn-primary btn-sm">Update</button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <div class="container text-center mt-3">
+        <a th:text="Logout" th:href="@{/logout}" class="btn btn-secondary"></a>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

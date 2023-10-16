@@ -1,0 +1,70 @@
+.my-card{
+    padding: 20px;
+    background: white;
+    border-radius: 12px;
+}
+body{
+    background: #e2e2e2!important;
+}
+
+.google-button {
+    background-color: #ffffff;
+    color: #333;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px 20px;
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.google-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+}
+
+.separator-line {
+    flex-grow: 1;
+    height: 1px;
+    background-color: #ccc;
+    border: none;
+    margin: 0 10px;
+}
+
+.separator-line-left,
+.separator-line-right {
+    background-color: #000; /* Set to black */
+}
+
+.or-text {
+    padding: 0 10px;
+}
+
+
+/* Add these CSS styles to your existing styles */
+a {
+    text-decoration: none;
+}
+.text-right.mt-3 a {
+    float: right; /* Align "Forgot Password?" to the right */
+}
+
+.text-right a {
+    float: left; /* Align "Register here" to the left */
+    margin-right: 10px; /* Add margin to separate it from the "Forgot Password?" link */
+}
+
+/* Adjust the separator style to keep it centered */
+.separator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0;
+    clear: both; /* Clear the floated elements */
+}
+
+.btn-login {
+    width: 220px; /* Adjust the width as needed */
+    height: 40px;
+}

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Trash Notes</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <!-- Link to Font Awesome CSS -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/sidebar.css}">
+
+    <!-- Boxicons -->
+    <link href="https://cdn.jsdelivr.net/npm/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet">
+
+    <!-- Include TinyMCE -->
+    <script src="https://cdn.tiny.cloud/1/ly2ttayt6bwot1bffllzhjt1utzx8jwqjrf6npnmy8lcm8ob/tinymce/6/tinymce.min.js"
+            referrerpolicy="origin"></script>
+
+    <!-- Include the dark theme CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tinymce@5.10.2/themes/oxide-dark/skins/ui/oxide-dark/content.css"
+          rel="stylesheet">
+
+</head>
+<body>
+
+<!--navbar-->
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #202124;">
+
+    <div class="container-fluid">
+        <!-- Brand -->
+        <a class="navbar-brand" href="/user/0/u/dashboard">NotesVenture</a>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <!-- Nav Items -->
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0 text-uppercase">
+
+                <!-- Dashboard -->
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/user/0/u/dashboard}">
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+
+                <!-- Logout -->
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/logout}">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<!-- End Navbar -->
+
+<!-- Use th:if to check if noteList is empty -->
+<div class="text-center mt-3">
+    <h4>Your Deleted Notes are here</h4>
+    <p>Trash Notes will be automatically deleted after 7 days</p>
+</div>
+
+<!--processing the notes-->
+<div class="container">
+
+    <div class="row">
+        <!-- Use th:if to check if noteList is empty -->
+        <div th:if="${trashNotesList.isEmpty()}" class="col">
+            <div class="no-notes-message">
+                <h1>You haven't any trash note</h1>
+            </div>
+        </div>
+
+        <div th:each="notes : ${trashNotesList}" class="col">
+
+            <!-- Use onclick attribute to call the showPopup() function on click and pass the title, description, and note ID -->
+            <a class="card mt-5 note-link" onclick="showPopup(this)"
+               th:attr="data-noteid=${notes.getId()}">
+                <!-- Replace "bx-icon" with the desired Boxicon name -->
+                <div class="card-icon">
+                    <i class='bx bx-icon'></i>
+                </div>
+                <div class="card-content">
+                    <span style="color: white" th:text="${notes.getTitle()}"></span>
+                    <br/>
+                    <span th:utext="${notes.getDescription()}"></span>
+                </div>
+                <!-- Add a div for notes created date -->
+                <div class="card-footer" style="color: #888; font-size: 14px;">
+                    <span th:if="${notes.getNotesUpdatedDate() == null}"
+                          th:text="${notes.getNotesCreatedDate()}"></span>
+                    <span th:if="${notes.getNotesUpdatedDate() != null}"
+                          th:text="${notes.getNotesUpdatedDate()}"></span>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+
+
+<div class="popup-container" id="update-note-popup">
+    <div class="popup-card">
+        <div class="popup-header">Trash Note</div>
+        <div class="popup-content">
+
+            <div class="text-center">
+                <p>If you delete from here, it will be delete permanently!</p>
+                <div class="popup-submit">
+
+                    <form method="post" th:action="@{/user/trash-note/process}">
+                        <!-- Hidden input field to store the note ID -->
+                        <input type="hidden" id="note-id" name="id">
+
+                        <!-- Submit button -->
+                        <div style="display: inline-block; margin-right: 10px;">
+                            <button name="action" value="restore" type="submit" class="btn btn-outline-success">Restore</button>
+                        </div>
+
+                        <!-- Custom delete button -->
+                        <div style="display: inline-block;">
+                            <button name="action" value="delete" type="submit" class="btn btn-outline-danger">Delete</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+        <div class="popup-close" onclick="hideUpdatePopup()">&times;</div>
+    </div>
+</div>
+
+<!-- Include the necessary scripts -->
+<script src="/js/trash_note.js"></script>
+
+</body>
+</html>

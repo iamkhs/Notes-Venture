@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Details</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <!-- Link to Font Awesome CSS -->
+    <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
+
+    <link rel="stylesheet" th:href="@{/css/profile-details.css}">
+    <link rel="stylesheet" href="/css/sidebar.css">
+
+</head>
+<body>
+
+<!--navbar-->
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #202124;">
+    <!-- Custom button to open the sidebar -->
+    <button class="sidebar-toggler mr-3 border-0 bg-transparent" type="button">
+        <img style="height: 30px; width: 30px; margin-left: 10px"
+             src="/img/menu.png"
+             alt="Open Sidebar"/>
+    </button>
+
+
+    <div class="container-fluid">
+        <!-- Brand -->
+        <a class="navbar-brand" href="/user/0/u/dashboard">NotesVenture</a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <!-- Nav Items -->
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0 text-uppercase">
+
+                <!-- Dashboard -->
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/user/0/u/dashboard}">
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+
+                <!-- Logout -->
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/logout}">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<!-- End Navbar -->
+
+<!-- Sidebar -->
+<div id="sidebar" class="sidebar">
+    <button
+            class="btn btn-danger sidebar-close border-0 bg-transparent"
+            type="button"
+    >
+        <img style="height: 16px" width="16px" src="/img/close.png" alt=""/>
+    </button>
+    <ul class="list-group">
+        <li class="list-group-item"><i class="fas fa-home"></i>
+            <a href="/">Home</a>
+        </li>
+        <li class="list-group-item">
+            <i class="fas fa-trash-alt"></i>
+            <a href="/">Trash</a>
+        </li>
+    </ul>
+</div>
+
+
+<div class="container">
+    <div class="profile-card dark-mode">
+        <div class="profile-header">
+            <h2>Profile Information</h2>
+            <img src="/img/default-avatar.png" class="rounded-circle" alt="Avatar">
+        </div>
+        <div class="profile-info">
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input th:value="${user.name}" type="text" class="form-control" id="name" value="John Doe" readonly>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input th:value="${user.email}" type="email" class="form-control" id="email"
+                       value="john.doe@example.com" readonly>
+            </div>
+            <div class="form-group">
+                <label for="reg-date">Registration Date:</label>
+                <input th:value="${user.userRegisterDate}" type="text" class="form-control" id="reg-date"
+                       value="2023-07-31" readonly>
+            </div>
+            <div class="form-group">
+                <label for="role">Role:</label>
+                <input th:value="User" type="text" class="form-control" id="role" value="Admin" readonly>
+            </div>
+            <div class="form-group">
+                <label for="status">Account Status:</label>
+                <input th:value="${user.isEnable()}" type="text" class="form-control" id="status" value="Active"
+                       readonly>
+            </div>
+        </div>
+        <div class="profile-footer">
+            <a th:href="@{/user/update-profile}" type="button" class="btn btn-outline-primary">Edit Profile</a>
+        </div>
+    </div>
+</div>
+
+<!-- Your main content goes here -->
+
+<!-- Link to Bootstrap and custom JavaScript -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!-- Link to your custom JavaScript -->
+<script src="/js/sidebar.js"></script>
+</body>
+</html>
