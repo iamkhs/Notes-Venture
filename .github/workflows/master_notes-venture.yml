@@ -47,5 +47,5 @@ jobs:
           app-name: 'notes-venture'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_19FA94DAA89F459399504120D53A1217 }}
-          package: ./build/libs/NotesVenture-0.0.1-SNAPSHOT.jar
+          package: ./java-app/build/libs/NotesVenture-0.0.1-SNAPSHOT.jar
 
