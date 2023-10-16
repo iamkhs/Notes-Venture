@@ -25,7 +25,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: java-app
-          path: build/libs/NotesVenture-0.0.1-SNAPSHOT.jar
+          path: build/libs/
 
   deploy:
     runs-on: ubuntu-latest
@@ -39,6 +39,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: java-app
+          path: java-app/
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
@@ -47,5 +48,4 @@ jobs:
           app-name: 'notes-venture'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_19FA94DAA89F459399504120D53A1217 }}
-          package: ./java-app/build/libs/NotesVenture-0.0.1-SNAPSHOT.jar
-
+          package: ./java-app/libs/NotesVenture-0.0.1-SNAPSHOT.jar
