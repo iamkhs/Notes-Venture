@@ -25,7 +25,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: java-app
-          path: build/libs/*.jar
+          path: build/libs/NotesVenture-0.0.1-SNAPSHOT.jar # Replace with the correct JAR file name
 
   deploy:
     runs-on: ubuntu-latest
@@ -47,4 +47,4 @@ jobs:
           app-name: 'notes-venture'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_19FA94DAA89F459399504120D53A1217 }}
-          package: build/libs/*.jar
+          package: ${{ github.workspace }}/java-app/NotesVenture-0.0.1-SNAPSHOT.jar # Replace with the correct JAR file name
