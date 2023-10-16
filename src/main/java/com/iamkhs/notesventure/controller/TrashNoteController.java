@@ -46,7 +46,7 @@ public class TrashNoteController {
         model.addAttribute("trashNotesList", trashNotesList);
 
         // Display the trash notes page
-        return "/user/trash-note";
+        return "user/trash-note";
     }
 
     // Process actions on a trash note (delete or restore)

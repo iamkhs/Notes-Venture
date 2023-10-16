@@ -41,7 +41,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">0.274s</div>
+<div class="counter">0.299s</div>
 <p>duration</p>
 </div>
 </td>
@@ -79,7 +79,7 @@
 </thead>
 <tr>
 <td class="success">contextLoads()</td>
-<td class="success">0.274s</td>
+<td class="success">0.299s</td>
 <td class="success">passed</td>
 </tr>
 </table>
@@ -87,8 +87,8 @@
 <div id="tab1" class="tab">
 <h2>Standard output</h2>
 <span class="code">
-<pre>21:59:38.705 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.iamkhs.notesventure.NotesVentureApplicationTests]: NotesVentureApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-21:59:38.753 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.iamkhs.notesventure.NotesVentureApplication for test class com.iamkhs.notesventure.NotesVentureApplicationTests
+<pre>00:32:09.446 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.iamkhs.notesventure.NotesVentureApplicationTests]: NotesVentureApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+00:32:09.493 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.iamkhs.notesventure.NotesVentureApplication for test class com.iamkhs.notesventure.NotesVentureApplicationTests
 
   .   ____          _            __ _ _
  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
@@ -98,25 +98,25 @@
  =========|_|==============|___/=/_/_/_/
  :: Spring Boot ::                (v3.1.2)
 
-2023-10-16T21:59:38.936+06:00  INFO 2822 --- [    Test worker] c.i.n.NotesVentureApplicationTests       : Starting NotesVentureApplicationTests using Java 17.0.7 with PID 2822 (started by iamkhs in /Users/iamkhs/IdeaProjects/NotesVenture)
-2023-10-16T21:59:38.937+06:00  INFO 2822 --- [    Test worker] c.i.n.NotesVentureApplicationTests       : The following 1 profile is active: &quot;prod&quot;
-2023-10-16T21:59:39.252+06:00  INFO 2822 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2023-10-16T21:59:39.289+06:00  INFO 2822 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 31 ms. Found 3 JPA repository interfaces.
-2023-10-16T21:59:39.521+06:00  INFO 2822 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2023-10-16T21:59:43.288+06:00  INFO 2822 --- [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@27e199ce
-2023-10-16T21:59:43.291+06:00  INFO 2822 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2023-10-16T21:59:43.329+06:00  INFO 2822 --- [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2023-10-16T21:59:43.353+06:00  INFO 2822 --- [    Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.2.6.Final
-2023-10-16T21:59:43.354+06:00  INFO 2822 --- [    Test worker] org.hibernate.cfg.Environment            : HHH000406: Using bytecode reflection optimizer
-2023-10-16T21:59:43.402+06:00  INFO 2822 --- [    Test worker] o.h.b.i.BytecodeProviderInitiator        : HHH000021: Bytecode provider name : bytebuddy
-2023-10-16T21:59:43.456+06:00  INFO 2822 --- [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
-2023-10-16T21:59:44.176+06:00  INFO 2822 --- [    Test worker] o.h.b.i.BytecodeProviderInitiator        : HHH000021: Bytecode provider name : bytebuddy
-2023-10-16T21:59:44.480+06:00  INFO 2822 --- [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
-2023-10-16T21:59:44.482+06:00  INFO 2822 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2023-10-16T21:59:44.678+06:00  INFO 2822 --- [    Test worker] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
-2023-10-16T21:59:44.714+06:00  WARN 2822 --- [    Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2023-10-16T21:59:44.785+06:00  INFO 2822 --- [    Test worker] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@464017f5, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@3c4231e5, org.springframework.security.web.context.SecurityContextHolderFilter@5a644d75, org.springframework.security.web.header.HeaderWriterFilter@183435c0, org.springframework.security.web.authentication.logout.LogoutFilter@5ce1ec7, org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter@5319e4fc, org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter@3b48361e, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@549be307, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@268f126f, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@3c1ef806, org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter@7f38545a, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@397f9672, org.springframework.security.web.access.ExceptionTranslationFilter@4b8c9729, org.springframework.security.web.access.intercept.AuthorizationFilter@3b6c55b6]
-2023-10-16T21:59:45.019+06:00  INFO 2822 --- [    Test worker] c.i.n.NotesVentureApplicationTests       : Started NotesVentureApplicationTests in 6.199 seconds (process running for 6.703)
+2023-10-17T00:32:09.668+06:00  INFO 1631 --- [    Test worker] c.i.n.NotesVentureApplicationTests       : Starting NotesVentureApplicationTests using Java 17.0.7 with PID 1631 (started by iamkhs in /Users/iamkhs/IdeaProjects/NotesVenture)
+2023-10-17T00:32:09.669+06:00  INFO 1631 --- [    Test worker] c.i.n.NotesVentureApplicationTests       : The following 1 profile is active: &quot;prod&quot;
+2023-10-17T00:32:09.969+06:00  INFO 1631 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-10-17T00:32:10.002+06:00  INFO 1631 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 28 ms. Found 3 JPA repository interfaces.
+2023-10-17T00:32:10.217+06:00  INFO 1631 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-10-17T00:32:13.966+06:00  INFO 1631 --- [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@27e199ce
+2023-10-17T00:32:13.969+06:00  INFO 1631 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-10-17T00:32:14.008+06:00  INFO 1631 --- [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-10-17T00:32:14.034+06:00  INFO 1631 --- [    Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.2.6.Final
+2023-10-17T00:32:14.035+06:00  INFO 1631 --- [    Test worker] org.hibernate.cfg.Environment            : HHH000406: Using bytecode reflection optimizer
+2023-10-17T00:32:14.087+06:00  INFO 1631 --- [    Test worker] o.h.b.i.BytecodeProviderInitiator        : HHH000021: Bytecode provider name : bytebuddy
+2023-10-17T00:32:14.144+06:00  INFO 1631 --- [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2023-10-17T00:32:14.783+06:00  INFO 1631 --- [    Test worker] o.h.b.i.BytecodeProviderInitiator        : HHH000021: Bytecode provider name : bytebuddy
+2023-10-17T00:32:15.090+06:00  INFO 1631 --- [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-10-17T00:32:15.091+06:00  INFO 1631 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-10-17T00:32:15.302+06:00  INFO 1631 --- [    Test worker] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2023-10-17T00:32:15.339+06:00  WARN 1631 --- [    Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-10-17T00:32:15.409+06:00  INFO 1631 --- [    Test worker] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@464017f5, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@3c4231e5, org.springframework.security.web.context.SecurityContextHolderFilter@5a644d75, org.springframework.security.web.header.HeaderWriterFilter@183435c0, org.springframework.security.web.authentication.logout.LogoutFilter@5ce1ec7, org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter@5319e4fc, org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter@3b48361e, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@549be307, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@268f126f, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@3c1ef806, org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter@7f38545a, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@397f9672, org.springframework.security.web.access.ExceptionTranslationFilter@4b8c9729, org.springframework.security.web.access.intercept.AuthorizationFilter@3b6c55b6]
+2023-10-17T00:32:15.639+06:00  INFO 1631 --- [    Test worker] c.i.n.NotesVentureApplicationTests       : Started NotesVentureApplicationTests in 6.088 seconds (process running for 6.605)
 </pre>
 </span>
 </div>
@@ -128,7 +128,7 @@
 <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
 </label>
 </div>Generated by 
-<a href="http://www.gradle.org">Gradle 8.1.1</a> at Oct 16, 2023, 9:59:45 PM</p>
+<a href="http://www.gradle.org">Gradle 8.1.1</a> at Oct 17, 2023, 12:32:16 AM</p>
 </div>
 </div>
 </body>

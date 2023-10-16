@@ -24,7 +24,7 @@ public class ProfileController {
     public String profileSetting(Principal principal, @AuthenticationPrincipal OAuth2User oAuth2User, Model model){
         User loggedUser = this.userServiceUtil.getLoggedUser(principal, oAuth2User);
         model.addAttribute("user", loggedUser);
-        return "/user/profile-details";
+        return "user/profile-details";
     }
 
 }
