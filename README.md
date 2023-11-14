@@ -1,5 +1,5 @@
 # NotesVenture - Your Personal Note-Taking App
-# Live link🚀 - https://notes-venture.azurewebsites.net/
+# Live link🚀 - https://note-venture.azurewebsites.net/
 Welcome to NotesVenture, your ultimate note-taking companion! This user-friendly web application, inspired by Google Keep Notes, simplifies your note-taking experience with essential features like creating, updating, and deleting notes.
 
 ## Features:
